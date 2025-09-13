@@ -1,0 +1,32 @@
+<section class="kairo-auth">
+    <div class="kairo-auth-card" role="form" aria-labelledby="kairoLoginTitle">
+        <div class="kairo-logo">
+            <img src="/LogoKairo.jpg" alt="Kairo — Organiza. Edita. Avanza." class="kairo-logo-img">
+        </div>
+
+        <form id="loginForm" class="kairo-form">
+            <label class="kairo-label" for="lemail">Usuario</label>
+            <input class="kairo-input-line" id="lemail" name="email" type="email" placeholder="usuario@correo.com"
+                required>
+
+            <label class="kairo-label" for="lpassword">Contraseña</label>
+            <input class="kairo-input-line" id="lpassword" name="password" type="password" placeholder="••••••••"
+                required>
+
+            <label class="kairo-check">
+                <input type="checkbox" id="termsCheck">
+                <span>Acepto términos y condiciones</span>
+            </label>
+
+            <button class="kairo-btn kairo-btn-primary" type="submit">INGRESAR</button>
+
+            <p class="kairo-link-row">
+                ¿Aún no tienes cuenta?
+                <a href="#/register" class="kairo-link">Regístrate aquí</a>
+            </p>
+
+            <!-- Mensajes de estado (útil para la rúbrica de heurísticas) -->
+            <div id="loginMsg" class="kairo-alert" hidden></div>
+        </form>
+    </div>
+</section>

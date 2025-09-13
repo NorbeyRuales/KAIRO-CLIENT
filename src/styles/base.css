@@ -1,0 +1,332 @@
+/* === Login Kairo (wireframe gris) === */
+:root {
+    --k-text: #222;
+    --k-muted: #666;
+    --k-line: #bdbdbd;
+    --k-border: #cfcfcf;
+    --k-btn: #c8c8c8;
+    --k-btn-hover: #bdbdbd;
+    --k-bg: #fff;
+}
+
+.kairo-auth {
+    min-height: calc(100vh - 0px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px;
+    background: var(--k-bg);
+    color: var(--k-text);
+}
+
+.kairo-auth-card {
+    width: min(420px, 92vw);
+    background: #fff;
+    border: 1px solid var(--k-border);
+    border-radius: 6px;
+    padding: 24px 20px 28px;
+}
+
+.kairo-logo {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 26px 0 10px;
+    margin-bottom: 8px;
+}
+
+/* Imagen del logo */
+.kairo-logo-img {
+    display: block;
+    width: min(320px, 92%);
+    /*aqui se ajusta el tamaño del logo */
+    height: auto;
+    z-index: 1;
+}
+
+.kairo-logo::before {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(rgba(0, 0, 0, .06), rgba(0, 0, 0, 0) 60%);
+}
+
+.kairo-logo-icon {
+    width: 84px;
+    height: 84px;
+    z-index: 1;
+}
+
+.kairo-logo-title {
+    z-index: 1;
+    margin: 6px 0 0;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.kairo-logo-sub {
+    z-index: 1;
+    margin: 0;
+    font-size: 14px;
+    color: var(--k-muted);
+}
+
+.kairo-label {
+    display: block;
+    margin: 18px 0 6px;
+    font-size: 13px;
+    color: var(--k-muted);
+}
+
+.kairo-input-line {
+    display: block;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    border-bottom: 1px solid var(--k-line);
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.kairo-input-line:focus {
+    border-bottom-color: #333;
+}
+
+.kairo-check {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    margin: 14px 0 18px;
+    color: var(--k-muted);
+    font-size: 13px;
+}
+
+.kairo-check input {
+    width: 16px;
+    height: 16px;
+}
+
+.kairo-btn {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 10px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    cursor: pointer;
+}
+
+.kairo-btn-primary {
+    background: var(--k-btn);
+    color: #111;
+}
+
+.kairo-btn-primary:hover {
+    background: var(--k-btn-hover);
+}
+
+.kairo-link-row {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--k-muted);
+}
+
+.kairo-link {
+    color: #333;
+    text-decoration: underline;
+}
+
+.kairo-alert {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--k-border);
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* ========= KAIRO · BOARD (wireframe móvil) ========= */
+
+/* layout base */
+.kairo-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+/* ---------- TOP BAR ---------- */
+.kairo-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: #cfcfcf;
+    /* gris barra superior */
+    border-bottom: 1px solid #bdbdbd;
+}
+
+/* título centrado visualmente */
+.kairo-topbar {
+    position: relative;
+}
+
+.kairo-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .6px;
+}
+
+/* botones (hamburguesa / perfil) */
+.icon-btn {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 22px;
+    border-radius: 3px;
+    border: 1px solid #bdbdbd;
+    background: #e6e6e6;
+    color: #222;
+    cursor: pointer;
+}
+
+/* ---------- BUSCADOR ---------- */
+.kairo-search {
+    padding: 8px 12px 4px;
+}
+
+#searchForm {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #cfcfcf;
+    /* gris barra buscador */
+    border-radius: 2px;
+    padding: 6px 40px 6px 10px;
+    /* deja espacio al icono derecho */
+}
+
+#searchInput {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    /* texto claro como el wireframe */
+}
+
+#searchInput::placeholder {
+    color: #f5f5f5;
+}
+
+#searchBtn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 22px;
+    border-radius: 3px;
+    border: 1px solid #bdbdbd;
+    background: #dedede;
+    color: #333;
+    cursor: pointer;
+}
+
+/* ---------- CONTENIDO / LISTA ---------- */
+.kairo-board {
+    flex: 1;
+    padding: 8px 12px;
+}
+
+.kairo-empty {
+    margin-top: 28vh;
+    /* centrado visual */
+    text-align: center;
+    color: #222;
+}
+
+.kairo-list {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+}
+
+.kairo-list .todo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: 10px 6px;
+    border-bottom: 1px solid #eee;
+}
+
+.kairo-list .todo.completed span {
+    color: #999;
+    text-decoration: line-through;
+}
+
+.kairo-list .remove {
+    border: none;
+    background: transparent;
+    text-decoration: underline;
+    font-size: 12px;
+    color: #333;
+    cursor: pointer;
+}
+
+/* ---------- BOTTOM (calendario / “Sin notas” / +) ---------- */
+.kairo-bottombar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    background: transparent;
+}
+
+.kairo-bottom-hint {
+    color: #666;
+    font-size: 12px;
+}
+
+.kairo-fab {
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    /* en el wireframe el “+” va suelto */
+    color: #111;
+    font-size: 32px;
+    line-height: 44px;
+    cursor: pointer;
+}
+
+/* botón calendario estilo caja */
+#calendarBtn {
+    width: 34px;
+    height: 28px;
+    border-radius: 4px;
+    border: 1px solid #d0d0d0;
+    background: #efefef;
+    cursor: pointer;
+}
