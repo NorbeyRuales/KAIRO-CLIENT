@@ -22,15 +22,13 @@ import { http } from '../api/http.js';
  *   console.error("Registration failed:", err.message);
  * }
  */
-export async function registerUser({ username, email, password }) {
-  return http.post('/api/v1/users', { username, email, password });
+export async function registerUser({ username, lastname, age, email, password }) {
+  const payload = { username, email, password };
+  if (lastname && lastname.trim()) payload.lastname = lastname.trim();
+  if (age !== undefined && age !== null && String(age).trim() !== '') payload.age = Number(age);
+  return http.post('/api/v1/users', payload);
 }
-/**
- * Login user
- * @param {Object} params - Login data
- * @param {string} params.email - User email
- * @param {string} params.password - User password
- */
+
 export async function loginUser({ email, password }) {
   return http.post('/api/v1/auth/login', { email, password });
 }

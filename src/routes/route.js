@@ -1,4 +1,6 @@
 import { loginUser, registerUser } from '../services/userService.js';
+import { createTask } from '../services/taskService.js';
+
 
 const app = document.getElementById('app');
 
@@ -27,6 +29,8 @@ async function loadView(name) {
   if (name === 'login' && typeof initLogin === 'function') initLogin();
   if (name === 'forgot' && typeof initForgot === 'function') initForgot();
   if (name === 'register' && typeof initRegister === 'function') initRegister();
+  if (name === 'update' && typeof initUpdate === 'function') initUpdate();
+  if (name === 'task-new' && typeof initTaskNew === 'function') initTaskNew();
 
 
 
@@ -48,21 +52,16 @@ export function initRouter() {
  */
 function handleRoute() {
   const path = (location.hash.startsWith('#/') ? location.hash.slice(2) : '') || 'login';
-  const known = ['home', 'board', 'login', 'register', 'forgot'];
+  const known = ['home', 'board', 'login', 'register', 'forgot', 'update', 'tasks/new'];
   const route = known.includes(path) ? path : 'login';
 
-  const viewName = route === 'home' ? 'register' : route;
+  const viewName = route === 'home' ? 'register' :
+    route === 'tasks/new' ? 'task-new' :
+      route;
 
-  // Validar sesión antes de entrar al board
   const token = localStorage.getItem('token');
-  if (route === 'board' && !token) {
-    return loadView('login');
-  }
-
-  // Si ya tengo token y estoy en login/registro → mandar al board
-  if ((route === 'login' || route === 'register') && token) {
-    return loadView('board');
-  }
+  if ((route === 'board' || route === 'tasks/new') && !token) return loadView('login');
+  if ((route === 'login' || route === 'register') && token) return loadView('board');
 
   loadView(viewName).catch(err => {
     console.error(err);
@@ -86,18 +85,23 @@ function initRegister() {
   if (!form) return;
 
   // Support both legacy IDs and Kairo IDs
-  const userInput  = document.getElementById('username')  || document.getElementById('rname');
-  const emailInput = document.getElementById('email')     || document.getElementById('remail');
-  const passInput  = document.getElementById('password')  || document.getElementById('rpassword');
-  const msg        = document.getElementById('registerMsg') || document.getElementById('regMsg');
+  const userInput = document.getElementById('username') || document.getElementById('rname');
+  const emailInput = document.getElementById('email') || document.getElementById('remail');
+  const passInput = document.getElementById('password') || document.getElementById('rpassword');
+  const msg = document.getElementById('registerMsg') || document.getElementById('regMsg');
+  const lastInput = document.getElementById('rlastname');
+  const ageInput = document.getElementById('rage');
+
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (msg) msg.textContent = '';
 
     const username = userInput?.value.trim();
-    const email    = emailInput?.value.trim();
+    const email = emailInput?.value.trim();
     const password = passInput?.value.trim();
+    const lastname = lastInput?.value.trim() || '';
+    const age = ageInput?.value ? Number(ageInput.value) : null;
 
     if (!username || !email || !password) {
       if (msg) msg.textContent = 'Completa nombre, correo y contraseña.';
@@ -108,9 +112,9 @@ function initRegister() {
     if (btn) btn.disabled = true;
 
     try {
-      await registerUser({ username, email, password });
+      await registerUser({ username, lastname, age, email, password });
       if (msg) msg.textContent = 'Registro exitoso';
-      setTimeout(() => (location.hash = '#/board'), 400);
+      setTimeout(() => (location.hash = '#/board'), 600);
     } catch (err) {
       if (msg) msg.textContent = `No se pudo registrar: ${err.message}`;
     } finally {
@@ -124,8 +128,8 @@ function initLogin() {
   if (!form) return;
 
   const emailInput = document.getElementById('lemail');
-  const passInput  = document.getElementById('lpassword');
-  const msg        = document.getElementById('loginMsg');
+  const passInput = document.getElementById('lpassword');
+  const msg = document.getElementById('loginMsg');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -152,6 +156,88 @@ function initLogin() {
     }
   });
 }
+
+function initTaskNew() {
+  const form = document.getElementById('taskForm');
+  const saveBtn = document.getElementById('taskSaveBtn');
+  const saving = document.getElementById('taskSaving');
+  const live = document.getElementById('formLiveRegion');
+
+  const titleEl = document.getElementById('taskTitle');
+  const detailEl = document.getElementById('taskDetail');
+  const dateEl = document.getElementById('taskDate');
+  const timeEl = document.getElementById('taskTime');
+  const statusEl = document.getElementById('taskStatus');
+
+  const errTitle = document.getElementById('errTitle');
+  const errDetail = document.getElementById('errDetail');
+  const errDate = document.getElementById('errDate');
+  const errTime = document.getElementById('errTime');
+  const errStatus = document.getElementById('errStatus');
+
+  const setErr = (el, msg) => { if (el) el.textContent = msg || ''; };
+
+  const validate = () => {
+    let ok = true;
+
+    const t = (titleEl.value || '').trim();
+    if (!t) { setErr(errTitle, 'Completa este campo'); ok = false; }
+    else if (t.length > 50) { setErr(errTitle, 'Máx. 50 caracteres'); ok = false; }
+    else setErr(errTitle, '');
+
+    const d = (detailEl.value || '');
+    if (d.length > 500) { setErr(errDetail, 'Máx. 500 caracteres'); ok = false; }
+    else setErr(errDetail, '');
+
+    if (!dateEl.value) { setErr(errDate, 'Completa este campo'); ok = false; } else setErr(errDate, '');
+    if (!timeEl.value) { setErr(errTime, 'Completa este campo'); ok = false; } else setErr(errTime, '');
+    if (!statusEl.value) { setErr(errStatus, 'Completa este campo'); ok = false; } else setErr(errStatus, '');
+
+    saveBtn.disabled = !ok;
+    return ok;
+  };
+
+  [titleEl, detailEl, dateEl, timeEl, statusEl].forEach(el => {
+    el.addEventListener('input', validate);
+    el.addEventListener('change', validate);
+  });
+  validate();
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validate()) {
+      if (live) { live.hidden = false; live.textContent = 'Revisa los campos marcados.'; }
+      return;
+    }
+
+    saveBtn.disabled = true;
+    saving.hidden = false;
+    if (live) { live.hidden = true; live.textContent = ''; }
+    const autoHide = setTimeout(() => { saving.hidden = true; }, 2000);
+
+    try {
+      await createTask({
+        title: titleEl.value.trim(),
+        detail: (detailEl.value || '').trim(),
+        date: dateEl.value,
+        time: timeEl.value,
+        status: statusEl.value
+      });
+      clearTimeout(autoHide);
+      saving.hidden = true;
+      location.hash = '#/board';
+    } catch (err) {
+      clearTimeout(autoHide);
+      saving.hidden = true;
+      saveBtn.disabled = false;
+      if (live) { live.hidden = false; live.textContent = 'No pudimos guardar tu tarea, inténtalo de nuevo'; }
+      if (import.meta.env && import.meta.env.DEV) console.error(err);
+    }
+  });
+}
+
+
+
 /**
  * Initialize the "board" view.
  * Sets up the todo form, input, and list with create/remove/toggle logic.
@@ -163,60 +249,41 @@ function initBoard() {
   const list = document.getElementById('todoList') || document.getElementById('notesList');
   if (!list) return;
 
-  // Creator (legacy: form submit) OR Kairo: + button
+
   const createBtn = document.getElementById('createBtn');
-
-  function addItem(title) {
-    if (!title) return;
-    const li = document.createElement('li');
-    li.className = 'todo';
-    li.innerHTML = `
-      <label>
-        <input type="checkbox" class="check">
-        <span>${title}</span>
-      </label>
-      <button class="link remove" type="button">Eliminar</button>
-    `;
-    // show list if it was hidden by empty state
-    const empty = document.getElementById('emptyState');
-    if (empty) empty.hidden = true;
-    list.hidden = false;
-    list.prepend(li);
+  if (createBtn) {
+    createBtn.addEventListener('click', () => { location.hash = '#/tasks/new'; });
   }
 
-  if (formLegacy && inputLegacy) {
-    formLegacy.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const title = inputLegacy.value.trim();
-      if (!title) return;
-      addItem(title);
-      inputLegacy.value = '';
+  const profileBtn = document.getElementById('profileBtn');
+  const profileMenu = document.getElementById('profileMenu');
+  if (profileBtn && profileMenu) {
+    const closeMenu = () => {
+      profileMenu.hidden = true;
+      profileBtn.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onEsc);
+    };
+    const onDocClick = (ev) => {
+      if (ev.target === profileBtn || profileBtn.contains(ev.target)) return;
+      if (ev.target === profileMenu || profileMenu.contains(ev.target)) return;
+      closeMenu();
+    };
+    const onEsc = (ev) => { if (ev.key === 'Escape') closeMenu(); };
+    profileBtn.addEventListener('click', () => {
+      const open = profileMenu.hidden === false;
+      if (open) closeMenu();
+      else {
+        profileMenu.hidden = false;
+        profileBtn.setAttribute('aria-expanded', 'true');
+        document.addEventListener('click', onDocClick);
+        document.addEventListener('keydown', onEsc);
+      }
     });
   }
 
-  if (createBtn && !formLegacy) {
-    createBtn.addEventListener('click', () => {
-      const title = prompt('Título de la nota/tarea:');
-      if (title) addItem(title.trim());
-    });
-  }
-
-  // Remove / toggle
-  list.addEventListener('click', (e) => {
-    const li = e.target.closest('.todo');
-    if (!li) return;
-    if (e.target.matches('.remove')) li.remove();
-    if (e.target.matches('.check')) li.classList.toggle('completed', e.target.checked);
-    // show empty state if no items
-    if (!list.children.length) {
-      const empty = document.getElementById('emptyState');
-      if (empty) empty.hidden = false;
-      list.hidden = true;
-    }
-  });
-
-  // Logout button
-  const logoutBtn = document.getElementById('profileBtn');
+  // Logout
+  const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
       localStorage.removeItem('token');
@@ -224,18 +291,42 @@ function initBoard() {
     });
   }
 
-
-  // Optional: search support for Kairo search form
+  // Buscador plegable + filtro
   const searchForm = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
-  if (searchForm && searchInput) {
-    searchForm.addEventListener('submit', (e) => e.preventDefault());
+  const searchBtn = document.getElementById('searchBtn');
+
+  if (searchForm && searchInput && searchBtn) {
+    // empieza plegado
+    searchForm.classList.add('is-compact');
+
+    const compactIfEmpty = () => {
+      if (!searchInput.value.trim()) {
+        searchForm.classList.add('is-compact');
+      }
+    };
+
+    searchBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const compact = searchForm.classList.contains('is-compact');
+      if (compact) {
+        searchForm.classList.remove('is-compact');
+        searchInput.focus();
+      } else if (!searchInput.value.trim()) {
+        searchForm.classList.add('is-compact');
+      }
+    });
+
+    searchInput.addEventListener('blur', compactIfEmpty);
     searchInput.addEventListener('input', () => {
       const q = searchInput.value.toLowerCase();
-      Array.from(list.children).forEach((li) => {
+      Array.from(list.children).forEach(li => {
         const text = li.textContent.toLowerCase();
         li.style.display = text.includes(q) ? '' : 'none';
       });
     });
   }
+
+
+
 }

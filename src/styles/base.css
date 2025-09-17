@@ -1,21 +1,88 @@
-/* === Login Kairo (wireframe gris) === */
+/* === KAIRO base === */
 :root {
-    --k-text: #222;
+    --k-text: #111;
     --k-muted: #666;
-    --k-line: #bdbdbd;
-    --k-border: #cfcfcf;
-    --k-btn: #c8c8c8;
-    --k-btn-hover: #bdbdbd;
-    --k-bg: #fff;
+    --k-line: #ddd;
+    --k-border: #ddd;
+    --k-btn: #333;
+    --k-btn-hover: #555;
+    --k-bg: #f7f7f7;
+    --k-font: 'Roboto', Arial, sans-serif;
 }
 
+html,
+body {
+    font-family: var(--k-font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+input,
+select,
+textarea {
+    font-family: inherit
+}
+
+
+
+.kairo-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0 10px;
+
+}
+
+.kairo-logo-img {
+    display: block;
+    margin: 0 auto 12px;
+    width: clamp(180px, 45vw, 340px);
+    height: auto;
+    max-width: 100%;
+    border-radius: 15%;
+}
+
+/* Tamaño y color del icono */
+.icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: currentColor;
+}
+
+/* */
+
+.icon--logout { -webkit-mask: url('/logout.svg') no-repeat center / contain; mask: url('/logout.svg') no-repeat center / contain; }
+.icon--user   { -webkit-mask: url('/user.svg')   no-repeat center / contain; mask: url('/user.svg')   no-repeat center / contain; }
+.icon--search { -webkit-mask: url('/search.svg') no-repeat center / contain; mask: url('/search.svg') no-repeat center / contain; }
+
+
+
+/* button color */
+.icon-btn {
+    color: #333;
+}
+
+.icon-btn:hover {
+    color: #000;
+}
+
+
+/* ---- Auth card ---- */
 .kairo-auth {
-    min-height: calc(100vh - 0px);
+    min-height: calc(100vh - 48px);
     display: flex;
     justify-content: center;
     align-items: flex-start;
     padding: 24px;
-    background: var(--k-bg);
+    background: transparent;
     color: var(--k-text);
 }
 
@@ -23,90 +90,39 @@
     width: min(420px, 92vw);
     background: #fff;
     border: 1px solid var(--k-border);
-    border-radius: 6px;
-    padding: 24px 20px 28px;
-}
-
-.kairo-logo {
-    position: relative;
-    display: grid;
-    place-items: center;
-    padding: 26px 0 10px;
-    margin-bottom: 8px;
-}
-
-/* Imagen del logo */
-.kairo-logo-img {
-    display: block;
-    width: min(320px, 92%);
-    /*aqui se ajusta el tamaño del logo */
-    height: auto;
-    z-index: 1;
-}
-
-.kairo-logo::before {
-    content: "";
-    position: absolute;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    background: radial-gradient(rgba(0, 0, 0, .06), rgba(0, 0, 0, 0) 60%);
-}
-
-.kairo-logo-icon {
-    width: 84px;
-    height: 84px;
-    z-index: 1;
-}
-
-.kairo-logo-title {
-    z-index: 1;
-    margin: 6px 0 0;
-    font-size: 40px;
-    font-weight: 700;
-}
-
-.kairo-logo-sub {
-    z-index: 1;
-    margin: 0;
-    font-size: 14px;
-    color: var(--k-muted);
+    border-radius: 8px;
+    padding: 24px 24px 28px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
 }
 
 .kairo-label {
     display: block;
-    margin: 18px 0 6px;
-    font-size: 13px;
-    color: var(--k-muted);
+    margin: 12px 0 6px;
+    font-size: 14px;
+    color: #555
 }
 
 .kairo-input-line {
     display: block;
     width: 100%;
-    border: none;
-    outline: none;
-    background: transparent;
-    border-bottom: 1px solid var(--k-line);
-    padding: 8px 0;
+    margin-top: 5px;
+    padding: 10px;
     font-size: 14px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    border-bottom: 1px solid var(--k-line);
 }
 
 .kairo-input-line:focus {
-    border-bottom-color: #333;
+    border-bottom-color: #555
 }
 
-.kairo-check {
-    display: flex;
-    align-items: center;
-    gap: .55rem;
-    margin: 14px 0 18px;
-    color: var(--k-muted);
-    font-size: 13px;
-}
-
-.kairo-check input {
-    width: 16px;
-    height: 16px;
+input[readonly],
+input [disabled] {
+    background: #f1f1f1;
+    cursor: not-allowed
 }
 
 .kairo-btn {
@@ -115,32 +131,31 @@
     border: none;
     border-radius: 4px;
     padding: 12px 10px;
-    margin-top: 15%;
-    font-weight: 600;
+    margin-top: 20%;
+    font-weight: 700;
     letter-spacing: .3px;
-    cursor: pointer;
+    cursor: pointer
 }
-
 
 .kairo-btn-primary {
     background: var(--k-btn);
-    color: #111;
+    color: #fff
 }
 
 .kairo-btn-primary:hover {
-    background: var(--k-btn-hover);
+    background: var(--k-btn-hover)
 }
 
 .kairo-link-row {
     text-align: center;
     margin-top: 14px;
     font-size: 13px;
-    color: var(--k-muted);
+    color: var(--k-muted)
 }
 
 .kairo-link {
     color: #333;
-    text-decoration: underline;
+    text-decoration: underline
 }
 
 .kairo-alert {
@@ -148,36 +163,28 @@
     padding: 10px 12px;
     border: 1px solid var(--k-border);
     border-radius: 6px;
-    font-size: 13px;
+    font-size: 13px
 }
 
-/* ========= KAIRO · BOARD (wireframe móvil) ========= */
-
-/* layout base */
+/* ========= BOARD ========= */
 .kairo-page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: #fff;
+    background: var(--k-bg)
 }
 
-/* ---------- TOP BAR ---------- */
+/* Topbar */
 .kairo-topbar {
     position: sticky;
     top: 0;
     z-index: 10;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
     padding: 6px 10px;
     background: #cfcfcf;
-    /* gris barra superior */
     border-bottom: 1px solid #bdbdbd;
-}
-
-/* título centrado visualmente */
-.kairo-topbar {
-    position: relative;
 }
 
 .kairo-title {
@@ -190,7 +197,6 @@
     letter-spacing: .6px;
 }
 
-/* botones (hamburguesa / perfil) */
 .icon-btn {
     display: grid;
     place-items: center;
@@ -203,71 +209,170 @@
     cursor: pointer;
 }
 
-/* ---------- BUSCADOR ---------- */
-.kairo-search {
-    padding: 8px 12px 4px;
+/* ===== Dropdown de perfil ===== */
+#profileMenu {
+    position: absolute;
+    right: 8px;
+    top: calc(100% + 6px);
+    min-width: 220px;
+
+    background: #fff;
+    /* panel blanco */
+    color: var(--k-text);
+    border: 1px solid var(--k-border);
+    border-radius: 8px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, .12);
+    padding: 6px;
+    z-index: 1000;
+
+    /* animación de aparición */
+    animation: kMenuIn .12s ease-out;
 }
 
-#searchForm {
-    position: relative;
+/* respeta el atributo [hidden] que activas desde JS */
+#profileMenu[hidden] {
+    display: none !important;
+}
+
+/* “triangulito” que apunta al botón */
+#profileMenu::before {
+    content: "";
+    position: absolute;
+    right: 16px;
+    /* alinea con el botón de perfil */
+    top: -6px;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-left: 1px solid var(--k-border);
+    border-top: 1px solid var(--k-border);
+    transform: rotate(45deg);
+}
+
+/* items del menú */
+#profileMenu a[role="menuitem"] {
     display: flex;
     align-items: center;
-    background: #cfcfcf;
-    /* gris barra buscador */
-    border-radius: 2px;
-    padding: 6px 40px 6px 10px;
-    /* deja espacio al icono derecho */
+    gap: .5rem;
+    padding: 10px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+    line-height: 1.1;
+    cursor: pointer;
 }
 
-#searchInput {
-    width: 100%;
-    border: none;
-    outline: none;
-    background: transparent;
-    text-align: center;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: .4px;
-    text-transform: uppercase;
-    color: #f5f5f5;
-    /* texto claro como el wireframe */
+/* hover, focus, active */
+#profileMenu a[role="menuitem"]:hover {
+    background: #f1f1f1;
 }
 
-#searchInput::placeholder {
-    color: #f5f5f5;
+#profileMenu a[role="menuitem"]:focus-visible {
+    outline: 2px solid #5b9dd9;
+    outline-offset: 2px;
+}
+
+#profileMenu a[role="menuitem"]:active {
+    background: #e7e7e7;
+}
+
+/* separador opcional por si añades más opciones */
+#profileMenu .k-sep {
+    height: 1px;
+    background: var(--k-border);
+    margin: 6px 8px;
+}
+
+/* animación */
+@keyframes kMenuIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+
+/* Buscador plegable (lupa a la derecha del topbar) */
+#searchForm {
+    margin-left: auto;
+    /* se pega a la derecha */
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#searchForm.is-compact {
+    padding: 0;
+    background: transparent
+}
+
+#searchForm.is-compact #searchInput {
+    width: 0;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    pointer-events: none;
+    transition: width .2s ease, opacity .2s ease;
 }
 
 #searchBtn {
-    position: absolute;
-    right: 6px;
-    top: 50%;
-    transform: translateY(-50%);
     width: 28px;
-    height: 22px;
-    border-radius: 3px;
-    border: 1px solid #bdbdbd;
-    background: #dedede;
+    height: 28px;
+    border-radius: 20%;
+    border: 1px solid var(--k-border);
+    background: #efefef;
     color: #333;
     cursor: pointer;
 }
 
-/* ---------- CONTENIDO / LISTA ---------- */
+#searchForm:not(.is-compact) {
+    background: #cfcfcf;
+    border-radius: 2px;
+    padding: 6px 40px 6px 10px;
+}
+
+#searchForm #searchInput {
+    width: 220px;
+    max-width: 36vw;
+    opacity: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #222;
+    transition: width .2s ease, opacity .2s ease;
+}
+
+#searchForm:not(.is-compact) #searchBtn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Contenido */
 .kairo-board {
     flex: 1;
-    padding: 8px 12px;
+    padding: 8px 12px
 }
 
 .kairo-empty {
     margin-top: 28vh;
-    /* centrado visual */
     text-align: center;
-    color: #222;
+    color: #222
 }
 
 .kairo-list {
     list-style: none;
     margin: 8px 0 0;
-    padding: 0;
+    padding: 0
 }
 
 .kairo-list .todo {
@@ -276,12 +381,12 @@
     justify-content: space-between;
     gap: .75rem;
     padding: 10px 6px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #eee
 }
 
 .kairo-list .todo.completed span {
     color: #999;
-    text-decoration: line-through;
+    text-decoration: line-through
 }
 
 .kairo-list .remove {
@@ -290,10 +395,10 @@
     text-decoration: underline;
     font-size: 12px;
     color: #333;
-    cursor: pointer;
+    cursor: pointer
 }
 
-/* ---------- BOTTOM (calendario / “Sin notas” / +) ---------- */
+/* Bottom bar */
 .kairo-bottombar {
     position: fixed;
     left: 0;
@@ -308,7 +413,7 @@
 
 .kairo-bottom-hint {
     color: #666;
-    font-size: 12px;
+    font-size: 12px
 }
 
 .kairo-fab {
@@ -316,19 +421,23 @@
     height: 44px;
     border: none;
     background: transparent;
-    /* en el wireframe el “+” va suelto */
     color: #111;
     font-size: 32px;
     line-height: 44px;
-    cursor: pointer;
+    cursor: pointer
 }
 
-/* botón calendario estilo caja */
 #calendarBtn {
     width: 34px;
     height: 28px;
     border-radius: 4px;
     border: 1px solid #d0d0d0;
     background: #efefef;
-    cursor: pointer;
+    cursor: pointer
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box
 }

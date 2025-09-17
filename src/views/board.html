@@ -1,34 +1,37 @@
 <section id="homePage" class="kairo-page" aria-label="Página principal">
-
-  <!-- Top bar -->
   <header class="kairo-topbar" role="banner">
-    <button id="menuBtn" class="icon-btn" aria-label="Abrir menú">☰</button>
+    <button id="logoutBtn" class="icon-btn" aria-label="Cerrar sesión" title="Cerrar sesión">
+      <span class="icon icon--logout" aria-hidden="true"></span>
+    </button>
     <h1 class="kairo-title">KAIRO</h1>
-    <button id="profileBtn" class="icon-btn" aria-label="Perfil">👤</button>
+
+    <!-- Lupa a la derecha (input plegable) -->
+<form id="searchForm" role="search" aria-label="Buscar notas" class="is-compact">
+  <input id="searchInput" name="q" type="search" placeholder="BUSCAR" autocomplete="off" />
+  <button id="searchBtn" type="button" aria-label="Buscar">
+    <span class="icon icon--search" aria-hidden="true"></span>
+  </button>
+</form>
+
+
+    <button id="profileBtn" class="icon-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="profileMenu"
+      aria-label="Opciones de cuenta" title="Cuenta">
+      <span class="icon icon--user" aria-hidden="true"></span>
+    </button>
+    <nav id="profileMenu" role="menu" hidden>
+      <a role="menuitem" href="#/update">Actualizar datos</a>
+      <a role="menuitem" href="#/forgot">Recuperar contraseña</a>
+    </nav>
   </header>
 
-  <!-- Search -->
-  <div class="kairo-search">
-    <form id="searchForm" role="search" aria-label="Buscar notas">
-      <input id="searchInput" name="q" type="search" placeholder="BUSCAR" autocomplete="off" />
-      <button id="searchBtn" type="submit" aria-label="Buscar">🔍</button>
-    </form>
-  </div>
-
-  <!-- Board / contenido -->
   <main class="kairo-board" role="main">
-    <!-- Lista de notas (vacía inicialmente) -->
     <ul id="notesList" class="kairo-list" hidden></ul>
-
-    <!-- Estado vacío -->
     <p id="emptyState" class="kairo-empty">Crea tu primera nota</p>
   </main>
 
-  <!-- Bottom / acciones -->
   <footer class="kairo-bottombar" role="contentinfo">
     <button id="calendarBtn" class="icon-btn" aria-label="Abrir calendario">📅</button>
     <span class="kairo-bottom-hint">Sin notas</span>
     <button id="createBtn" class="kairo-fab" aria-label="Crear nota">+</button>
   </footer>
-
 </section>
