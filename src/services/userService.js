@@ -22,13 +22,20 @@ import { http } from '../api/http.js';
  *   console.error("Registration failed:", err.message);
  * }
  */
-export async function registerUser({ username, lastname, age, email, password }) {
-  const payload = { username, email, password };
-  if (lastname && lastname.trim()) payload.lastname = lastname.trim();
-  if (age !== undefined && age !== null && String(age).trim() !== '') payload.age = Number(age);
+
+
+
+export async function registerUser({ username, lastname, birthdate, email, password }) {
+  const payload = {
+    username: username?.trim(),
+    lastname: lastname?.trim(),
+    birthdate,            // YYYY-MM-DD (del <input type="date">)
+    email: email?.trim(),
+    password
+  };
   return http.post('/api/v1/users', payload);
 }
 
-export async function loginUser({ email, password }) {
-  return http.post('/api/v1/auth/login', { email, password });
+export  function loginUser({ email, password }) {
+  return http.post('/auth/login', { email, password }); 
 }

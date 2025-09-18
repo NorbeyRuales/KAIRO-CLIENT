@@ -1,5 +1,5 @@
 import { loginUser, registerUser } from '../services/userService.js';
-import { createTask } from '../services/taskService.js';
+import { createTask, getTasks } from '../services/taskService.js';
 
 
 const app = document.getElementById('app');
@@ -84,27 +84,26 @@ function initRegister() {
   const form = document.getElementById('registerForm');
   if (!form) return;
 
-  // Support both legacy IDs and Kairo IDs
-  const userInput = document.getElementById('username') || document.getElementById('rname');
-  const emailInput = document.getElementById('email') || document.getElementById('remail');
-  const passInput = document.getElementById('password') || document.getElementById('rpassword');
-  const msg = document.getElementById('registerMsg') || document.getElementById('regMsg');
-  const lastInput = document.getElementById('rlastname');
-  const ageInput = document.getElementById('rage');
-
+  // Inputs
+  const userInput = document.getElementById('rname');       // username
+  const lastInput = document.getElementById('rlastname');   // lastname
+  const birthInput = document.getElementById('rbirthdate');  // birthdate (YYYY-MM-DD)
+  const emailInput = document.getElementById('remail');      // email
+  const passInput = document.getElementById('rpassword');   // password
+  const msg = document.getElementById('regMsg');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (msg) msg.textContent = '';
+    if (msg) { msg.hidden = true; msg.textContent = ''; }
 
     const username = userInput?.value.trim();
+    const lastname = lastInput?.value.trim();
+    const birthdate = birthInput?.value;      // ya viene YYYY-MM-DD
     const email = emailInput?.value.trim();
-    const password = passInput?.value.trim();
-    const lastname = lastInput?.value.trim() || '';
-    const age = ageInput?.value ? Number(ageInput.value) : null;
+    const password = passInput?.value;
 
-    if (!username || !email || !password) {
-      if (msg) msg.textContent = 'Completa nombre, correo y contraseña.';
+    if (!username || !lastname || !birthdate || !email || !password) {
+      if (msg) { msg.hidden = false; msg.textContent = 'Completa todos los campos.'; }
       return;
     }
 
@@ -112,11 +111,11 @@ function initRegister() {
     if (btn) btn.disabled = true;
 
     try {
-      await registerUser({ username, lastname, age, email, password });
-      if (msg) msg.textContent = 'Registro exitoso';
+      await registerUser({ username, lastname, birthdate, email, password });
+      if (msg) { msg.hidden = false; msg.textContent = 'Registro exitoso'; }
       setTimeout(() => (location.hash = '#/board'), 600);
     } catch (err) {
-      if (msg) msg.textContent = `No se pudo registrar: ${err.message}`;
+      if (msg) { msg.hidden = false; msg.textContent = `No se pudo registrar: ${err.message}`; }
     } finally {
       if (btn) btn.disabled = false;
     }
@@ -249,6 +248,56 @@ function initBoard() {
   const list = document.getElementById('todoList') || document.getElementById('notesList');
   if (!list) return;
 
+  const emptyState = document.getElementById('emptyState');
+
+
+  // === CARGAR TAREAS EN EL BOARD ===
+  async function loadTasks() {
+    try {
+      const tasks = await getTasks();
+
+      // limpiar lista
+      list.innerHTML = '';
+
+      if (!Array.isArray(tasks) || tasks.length === 0) {
+        // no hay tareas: ocultar lista, mostrar empty
+        list.hidden = true;
+        if (emptyState) emptyState.hidden = false;
+        return;
+      }
+
+      // hay tareas: mostrar lista, ocultar empty
+      list.hidden = false;
+      if (emptyState) emptyState.hidden = true;
+
+      const isListTag = list.tagName === 'UL' || list.tagName === 'OL';
+
+      for (const t of tasks) {
+        const el = document.createElement(isListTag ? 'li' : 'div');
+        el.className = 'note-item';
+        el.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:.5rem;align-items:baseline">
+          <strong>${t.title ?? ''}</strong>
+          <small>${t.date ?? ''} ${t.time ?? ''}</small>
+        </div>
+        ${t.detail ? `<div style="opacity:.85">${t.detail}</div>` : ''}
+        <span class="badge" style="display:inline-block;margin-top:.25rem;opacity:.8">${t.status ?? ''}</span>
+      `;
+        list.appendChild(el);
+      }
+    } catch (e) {
+      if (import.meta.env?.DEV) console.error('No se pudieron cargar las tareas:', e);
+      list.hidden = true;
+      if (emptyState) {
+        emptyState.hidden = false;
+        emptyState.textContent = 'Error al obtener tareas';
+        emptyState.style.color = '#f55';
+      }
+    }
+  }
+
+  // llamada inicial
+  loadTasks();
 
   const createBtn = document.getElementById('createBtn');
   if (createBtn) {

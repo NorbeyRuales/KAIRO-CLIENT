@@ -13,3 +13,7 @@ export async function createTask({ title, detail, date, time, status }) {
         dueAt
     });
 }
+
+export function getTasks() {
+    return http.get('/api/v1/tasks');
+}
