@@ -59,11 +59,44 @@ textarea {
 
 /* */
 
-.icon--logout { -webkit-mask: url('/logout.svg') no-repeat center / contain; mask: url('/logout.svg') no-repeat center / contain; }
-.icon--user   { -webkit-mask: url('/user.svg')   no-repeat center / contain; mask: url('/user.svg')   no-repeat center / contain; }
-.icon--search { -webkit-mask: url('/search.svg') no-repeat center / contain; mask: url('/search.svg') no-repeat center / contain; }
+.icon--logout {
+    -webkit-mask: url('/logout.svg') no-repeat center / contain;
+    mask: url('/logout.svg') no-repeat center / contain;
+}
+
+.icon--user {
+    -webkit-mask: url('/user.svg') no-repeat center / contain;
+    mask: url('/user.svg') no-repeat center / contain;
+}
+
+.icon--search {
+    -webkit-mask: url('/search.svg') no-repeat center / contain;
+    mask: url('/search.svg') no-repeat center / contain;
+}
+
+.icon--back {
+    -webkit-mask: url('/back.svg') no-repeat center / contain;
+    mask: url('/back.svg') no-repeat center / contain;
+}
+
+.icon--noteadd {
+    -webkit-mask: url('/note-add.svg') no-repeat center / contain;
+    mask: url('/note-add.svg') no-repeat center / contain;
+}
+
+.icon--calendar {
+    -webkit-mask: url('/calendar.svg') no-repeat center / contain;
+    mask: url('/calendar.svg') no-repeat center / contain;
+}
 
 
+/* tamaño del icono dentro del FAB */
+.kairo-fab .icon {
+    width: 40px;
+    height: 40px;
+    background-color: currentColor;
+    /* hereda color del botón */
+}
 
 /* button color */
 .icon-btn {
@@ -73,6 +106,7 @@ textarea {
 .icon-btn:hover {
     color: #000;
 }
+
 
 
 /* ---- Auth card ---- */
@@ -200,14 +234,25 @@ input [disabled] {
 .icon-btn {
     display: grid;
     place-items: center;
-    width: 28px;
-    height: 22px;
-    border-radius: 3px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 8px;
     border: 1px solid #bdbdbd;
     background: #e6e6e6;
     color: #222;
     cursor: pointer;
 }
+
+.icon-btn .icon {
+    width: 20px;
+    height: 20px;
+    background-color: currentColor;
+}
+
+
+
+
 
 /* ===== Dropdown de perfil ===== */
 #profileMenu {
@@ -234,7 +279,7 @@ input [disabled] {
     display: none !important;
 }
 
-/* “triangulito” que apunta al botón */
+/* “triangulito” que sale del botón */
 #profileMenu::before {
     content: "";
     position: absolute;
@@ -277,7 +322,7 @@ input [disabled] {
     background: #e7e7e7;
 }
 
-/* separador opcional por si añades más opciones */
+/* separador  */
 #profileMenu .k-sep {
     height: 1px;
     background: var(--k-border);
@@ -412,8 +457,8 @@ input [disabled] {
 }
 
 .kairo-bottom-hint {
-    color: #666;
-    font-size: 12px
+    color: #a4a2a2;
+    font-size: 14px
 }
 
 .kairo-fab {
@@ -435,6 +480,60 @@ input [disabled] {
     background: #efefef;
     cursor: pointer
 }
+
+/* ===== Board dentro de tarjeta ===== */
+.kairo-main {
+    flex: 1;
+}
+
+.kairo-auth.kairo-auth--board {
+    align-items: flex-start;
+    padding: 25px 25px;
+}
+
+.kairo-auth-card.kairo-card-board {
+    width: min(920px, 94vw);
+    padding: 16px 16px 8px;
+}
+
+.kairo-card-board .kairo-board {
+    max-height: calc(100vh - 180px);
+    overflow: auto;
+    padding: 8px 4px;
+}
+
+/* “footer” interno de la tarjeta (calendario, texto, +) */
+.kairo-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 4px 4px;
+    border-top: 1px solid var(--k-border);
+    margin-top: 6px;
+}
+
+@media (max-width: 640px) {
+    .kairo-auth-card.kairo-card-board {
+        width: min(100%, 94vw);
+        padding: 12px 12px 6px;
+    }
+
+}
+
+/* Card para páginas de formulario (tasks/new, etc.) */
+.kairo-auth.kairo-auth--form {
+    align-items: flex-start;
+    /* o center si prefieres centrar vertical */
+    padding: 24px 16px;
+}
+
+.kairo-auth-card.kairo-card-form {
+    width: min(620px, 94vw);
+    padding: 20px 20px 16px;
+}
+
+
 
 *,
 *::before,

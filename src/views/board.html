@@ -6,12 +6,12 @@
     <h1 class="kairo-title">KAIRO</h1>
 
     <!-- Lupa a la derecha (input plegable) -->
-<form id="searchForm" role="search" aria-label="Buscar notas" class="is-compact">
-  <input id="searchInput" name="q" type="search" placeholder="BUSCAR" autocomplete="off" />
-  <button id="searchBtn" type="button" aria-label="Buscar">
-    <span class="icon icon--search" aria-hidden="true"></span>
-  </button>
-</form>
+    <form id="searchForm" role="search" aria-label="Buscar notas" class="is-compact">
+      <input id="searchInput" name="q" type="search" placeholder="BUSCAR" autocomplete="off" />
+      <button id="searchBtn" type="button" aria-label="Buscar">
+        <span class="icon icon--search" aria-hidden="true"></span>
+      </button>
+    </form>
 
 
     <button id="profileBtn" class="icon-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="profileMenu"
@@ -24,14 +24,27 @@
     </nav>
   </header>
 
-  <main class="kairo-board" role="main">
-    <ul id="notesList" class="kairo-list" hidden></ul>
-    <p id="emptyState" class="kairo-empty">Crea tu primera nota</p>
+  <main class="kairo-main">
+    <div class="kairo-auth kairo-auth--board">
+      <div class="kairo-auth-card kairo-card-board">
+        <div class="kairo-board" role="region" aria-label="Tus notas">
+          <ul id="notesList" class="kairo-list" hidden></ul>
+          <p id="emptyState" class="kairo-empty">Crea tu primera nota</p>
+        </div>
+
+        <!-- Footer interno de la tarjeta -->
+        <div class="kairo-card-footer">
+          <button id="calendarBtn" class="icon-btn" aria-label="Abrir calendario">
+            <span class="icon icon--calendar" aria-hidden="true"></span>
+          </button>
+          <span class="kairo-bottom-hint">Sin notas</span>
+          <button id="createBtn" class="kairo-fab" aria-label="Crear nota">
+                <span class="icon icon--noteadd" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <footer class="kairo-bottombar" role="contentinfo">
-    <button id="calendarBtn" class="icon-btn" aria-label="Abrir calendario">📅</button>
-    <span class="kairo-bottom-hint">Sin notas</span>
-    <button id="createBtn" class="kairo-fab" aria-label="Crear nota">+</button>
-  </footer>
+
 </section>

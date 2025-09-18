@@ -1,48 +1,51 @@
 <section id="taskNewPage" class="kairo-page" aria-label="Nueva tarea">
   <header class="kairo-topbar" role="banner">
-    <a href="#/board" class="icon-btn" aria-label="Volver" title="Volver">←</a>
+    <a href="#/board" class="icon-btn" aria-label="Volver" title="Volver">
+      <span class="icon icon--back" aria-hidden="true"></span>
+    </a>
     <h1 class="kairo-title">NUEVA TAREA</h1>
     <span aria-hidden="true"></span>
   </header>
 
-  <main class="kairo-board" role="main">
-    <div id="formLiveRegion" aria-live="polite" role="status" hidden></div>
+  <div class="kairo-auth kairo-auth--form">
+    <div class="kairo-auth-card kairo-card-form">
+      <div id="formLiveRegion" aria-live="polite" role="status" hidden></div>
 
-    <form id="taskForm" novalidate>
-      <label class="kairo-label" for="taskTitle">Título</label>
-      <input id="taskTitle" name="title" class="kairo-input-line" type="text"
-             maxlength="50" required aria-describedby="errTitle" autocomplete="off" />
-      <small id="errTitle" aria-live="polite"></small>
+      <form id="taskForm" novalidate>
+        <label class="kairo-label" for="taskTitle">Título</label>
+        <input id="taskTitle" name="title" class="kairo-input-line" type="text" maxlength="50" required
+          aria-describedby="errTitle" autocomplete="off" />
+        <small id="errTitle" aria-live="polite"></small>
 
-      <label class="kairo-label" for="taskDetail">Detalle (opcional)</label>
-      <textarea id="taskDetail" name="detail" class="kairo-input-line" maxlength="500"
-                rows="4" aria-describedby="errDetail"></textarea>
-      <small id="errDetail" aria-live="polite">Máximo 500 caracteres.</small>
+        <label class="kairo-label" for="taskDetail">Detalle (opcional)</label>
+        <textarea id="taskDetail" name="detail" class="kairo-input-line" maxlength="500" rows="4"
+          aria-describedby="errDetail"></textarea>
+        <small id="errDetail" aria-live="polite">Máximo 500 caracteres.</small>
 
-      <label class="kairo-label" for="taskDate">Fecha</label>
-      <input id="taskDate" name="date" class="kairo-input-line" type="date"
-             required aria-describedby="errDate" />
-      <small id="errDate" aria-live="polite"></small>
+        <label class="kairo-label" for="taskDate">Fecha</label>
+        <input id="taskDate" name="date" class="kairo-input-line" type="date" required aria-describedby="errDate" />
+        <small id="errDate" aria-live="polite"></small>
 
-      <label class="kairo-label" for="taskTime">Hora</label>
-      <input id="taskTime" name="time" class="kairo-input-line" type="time"
-             required aria-describedby="errTime" />
-      <small id="errTime" aria-live="polite"></small>
+        <label class="kairo-label" for="taskTime">Hora</label>
+        <input id="taskTime" name="time" class="kairo-input-line" type="time" required aria-describedby="errTime" />
+        <small id="errTime" aria-live="polite"></small>
 
-      <label class="kairo-label" for="taskStatus">Estado</label>
-      <select id="taskStatus" name="status" class="kairo-input-line"
-              required aria-describedby="errStatus">
-        <option value="" selected disabled>Selecciona…</option>
-        <option value="todo">Por hacer</option>
-        <option value="doing">Haciendo</option>
-        <option value="done">Hecho</option>
-      </select>
-      <small id="errStatus" aria-live="polite"></small>
+        <label class="kairo-label" for="taskStatus">Estado</label>
+        <select id="taskStatus" name="status" class="kairo-input-line" required aria-describedby="errStatus">
+          <option value="" selected disabled>Selecciona…</option>
+          <option value="todo">Por hacer</option>
+          <option value="doing">Haciendo</option>
+          <option value="done">Hecho</option>
+        </select>
+        <small id="errStatus" aria-live="polite"></small>
 
-      <button id="taskSaveBtn" class="kairo-btn kairo-btn-primary" type="submit" disabled>Guardar</button>
-      <div id="taskSaving" role="status" aria-live="polite" hidden>Guardando…</div>
+        <button id="taskSaveBtn" class="kairo-btn kairo-btn-primary" type="submit" disabled>Guardar</button>
+        <div id="taskSaving" role="status" aria-live="polite" hidden>Guardando…</div>
 
-      <p class="kairo-link-row"><a class="kairo-link" href="#/board">Cancelar</a></p>
-    </form>
-  </main>
+        <p class="kairo-link-row"><a class="kairo-link" href="#/board">Cancelar</a></p>
+      </form>
+    </div>
+  </div>
+
+
 </section>
