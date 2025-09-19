@@ -1,7 +1,6 @@
 import { loginUser, registerUser } from '../services/userService.js';
 import { createTask, getTasks } from '../services/taskService.js';
 
-
 const app = document.getElementById('app');
 
 /**
@@ -31,10 +30,6 @@ async function loadView(name) {
   if (name === 'register' && typeof initRegister === 'function') initRegister();
   if (name === 'update' && typeof initUpdate === 'function') initUpdate();
   if (name === 'task-new' && typeof initTaskNew === 'function') initTaskNew();
-
-
-
-
 }
 
 /**
@@ -71,11 +66,6 @@ function handleRoute() {
 
 /* ---- View-specific logic ---- */
 
-/**
- * Initialize the "home" view.
- * Attaches a submit handler to the register form to navigate to the board.
- */
-
 function initHome() {
   console.log('Home view loaded');
 }
@@ -85,22 +75,88 @@ function initRegister() {
   if (!form) return;
 
   // Inputs
-  const userInput = document.getElementById('rname');       // username
-  const lastInput = document.getElementById('rlastname');   // lastname
-  const birthInput = document.getElementById('rbirthdate');  // birthdate (YYYY-MM-DD)
-  const emailInput = document.getElementById('remail');      // email
-  const passInput = document.getElementById('rpassword');   // password
-  const msg = document.getElementById('regMsg');
+  const userInput  = document.getElementById('rname');        // username
+  const lastInput  = document.getElementById('rlastname');    // lastname
+  const birthInput = document.getElementById('rbirthdate');   // birthdate (YYYY-MM-DD)
+  const emailInput = document.getElementById('remail');       // email
+  const passInput  = document.getElementById('rpassword');    // password
+  const pass2Input = document.getElementById('rpassword2');   // confirmar contraseña (asegúrate de tener este input en el HTML)
+  const msg        = document.getElementById('regMsg');
+
+  // Límite de fecha para ≥13 años (permite todo el año)
+  if (birthInput) {
+    const yearLimit = new Date().getUTCFullYear() - 13;
+    birthInput.max = `${yearLimit}-12-31`;
+    birthInput.min = '1900-01-01';
+  }
+
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  const showMsg = (text) => {
+    if (!msg) return;
+    msg.hidden = !text;
+    msg.textContent = text || '';
+  };
+
+  // Fuerza mínima de contraseña
+  const passStrong = (pwd) => (
+    /[A-Z]/.test(pwd) &&
+    /[a-z]/.test(pwd) &&
+    /\d/.test(pwd)    &&
+    pwd.length >= 8
+  );
+
+  const validate = () => {
+    let ok = true;
+
+    // requeridos
+    if (!userInput.value.trim() || !lastInput.value.trim() ||
+        !birthInput.value || !emailInput.value.trim() ||
+        !passInput.value || (pass2Input && !pass2Input.value)) {
+      ok = false;
+    }
+
+    // edad ≥ 13 (laxa por año)
+    if (birthInput.value && !isAtLeastYearsOldLoose(birthInput.value, 13)) {
+      ok = false;
+      showMsg('Debes tener al menos 13 años.');
+    }
+
+    // fuerza de contraseña
+    if (passInput.value && !passStrong(passInput.value)) {
+      ok = false;
+      showMsg('La contraseña debe tener 8+ caracteres, con mayúscula, minúscula y número.');
+    }
+
+    // confirmar contraseña
+    if (passInput.value && pass2Input && pass2Input.value && passInput.value !== pass2Input.value) {
+      ok = false;
+      showMsg('Las contraseñas no coinciden.');
+    }
+
+    // si todo bien, limpia mensaje
+    if (ok) showMsg('');
+
+    if (submitBtn) submitBtn.disabled = !ok;
+    return ok;
+  };
+
+  // validar en tiempo real
+  [userInput, lastInput, birthInput, emailInput, passInput, pass2Input]
+    .forEach(el => el && el.addEventListener('input', validate));
+  validate(); // estado inicial del botón
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!validate()) return;
+
     if (msg) { msg.hidden = true; msg.textContent = ''; }
 
-    const username = userInput?.value.trim();
-    const lastname = lastInput?.value.trim();
-    const birthdate = birthInput?.value;      // ya viene YYYY-MM-DD
-    const email = emailInput?.value.trim();
-    const password = passInput?.value;
+    const username  = userInput?.value.trim();
+    const lastname  = lastInput?.value.trim();
+    const birthdate = birthInput?.value;      // YYYY-MM-DD
+    const email     = emailInput?.value.trim();
+    const password  = passInput?.value;
 
     if (!username || !lastname || !birthdate || !email || !password) {
       if (msg) { msg.hidden = false; msg.textContent = 'Completa todos los campos.'; }
@@ -122,13 +178,42 @@ function initRegister() {
   });
 }
 
+// Convierte "YYYY-MM-DD" a Date en UTC (evita off-by-one por husos horarios)
+function parseISODateUTC(yyyyMmDd) {
+  const [y, m, d] = (yyyyMmDd || '').split('-').map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(Date.UTC(y, m - 1, d));
+}
+
+// >= 13 SOLO por año (validación laxa)
+function isAtLeastYearsOldLoose(birthStr, years = 13) {
+  const year = Number((birthStr || '').slice(0, 4));
+  if (!year) return false;
+  const currentYear = new Date().getUTCFullYear();
+  return year <= (currentYear - years);
+}
+
+// ¿N años o más? (compara contra la "fecha corte" hoy - N años en UTC)
+function isAtLeastYearsOld(birthStr, years = 13) {
+  const birth = parseISODateUTC(birthStr);
+  if (!birth) return false;
+
+  const now = new Date();
+  const cutoff = new Date(Date.UTC(
+    now.getUTCFullYear() - years,
+    now.getUTCMonth(),
+    now.getUTCDate()
+  ));
+  return birth <= cutoff; // nacido el mismo día/hace más tiempo ⇒ OK
+}
+
 function initLogin() {
   const form = document.getElementById('loginForm');
   if (!form) return;
 
   const emailInput = document.getElementById('lemail');
-  const passInput = document.getElementById('lpassword');
-  const msg = document.getElementById('loginMsg');
+  const passInput  = document.getElementById('lpassword');
+  const msg        = document.getElementById('loginMsg');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -157,21 +242,21 @@ function initLogin() {
 }
 
 function initTaskNew() {
-  const form = document.getElementById('taskForm');
+  const form    = document.getElementById('taskForm');
   const saveBtn = document.getElementById('taskSaveBtn');
-  const saving = document.getElementById('taskSaving');
-  const live = document.getElementById('formLiveRegion');
+  const saving  = document.getElementById('taskSaving');
+  const live    = document.getElementById('formLiveRegion');
 
-  const titleEl = document.getElementById('taskTitle');
+  const titleEl  = document.getElementById('taskTitle');
   const detailEl = document.getElementById('taskDetail');
-  const dateEl = document.getElementById('taskDate');
-  const timeEl = document.getElementById('taskTime');
+  const dateEl   = document.getElementById('taskDate');
+  const timeEl   = document.getElementById('taskTime');
   const statusEl = document.getElementById('taskStatus');
 
-  const errTitle = document.getElementById('errTitle');
+  const errTitle  = document.getElementById('errTitle');
   const errDetail = document.getElementById('errDetail');
-  const errDate = document.getElementById('errDate');
-  const errTime = document.getElementById('errTime');
+  const errDate   = document.getElementById('errDate');
+  const errTime   = document.getElementById('errTime');
   const errStatus = document.getElementById('errStatus');
 
   const setErr = (el, msg) => { if (el) el.textContent = msg || ''; };
@@ -235,21 +320,18 @@ function initTaskNew() {
   });
 }
 
-
-
 /**
  * Initialize the "board" view.
  * Sets up the todo form, input, and list with create/remove/toggle logic.
  */
 function initBoard() {
   // Try legacy IDs first
-  const formLegacy = document.getElementById('todoForm');
+  const formLegacy  = document.getElementById('todoForm');
   const inputLegacy = document.getElementById('newTodo');
-  const list = document.getElementById('todoList') || document.getElementById('notesList');
+  const list        = document.getElementById('todoList') || document.getElementById('notesList');
   if (!list) return;
 
   const emptyState = document.getElementById('emptyState');
-
 
   // === CARGAR TAREAS EN EL BOARD ===
   async function loadTasks() {
@@ -304,7 +386,7 @@ function initBoard() {
     createBtn.addEventListener('click', () => { location.hash = '#/tasks/new'; });
   }
 
-  const profileBtn = document.getElementById('profileBtn');
+  const profileBtn  = document.getElementById('profileBtn');
   const profileMenu = document.getElementById('profileMenu');
   if (profileBtn && profileMenu) {
     const closeMenu = () => {
@@ -375,7 +457,4 @@ function initBoard() {
       });
     });
   }
-
-
-
 }

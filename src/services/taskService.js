@@ -1,19 +1,42 @@
 import { http } from '../api/http.js';
 
-// Crea una tarea en el backend.
-// Combina fecha+hora a ISO para enviarla como dueAt.
-export async function createTask({ title, detail, date, time, status }) {
-    const dueAt = (date && time) ? new Date(`${date}T${time}:00`).toISOString() : null;
-
-    // Ajusta el endpoint si tu API usa otro path/campos
-    return http.post('/api/v1/tasks', {
-        title,
-        detail,
-        status,
-        dueAt
-    });
+/**
+ * Obtener todas las tareas del usuario autenticado.
+ * @returns {Promise<Array>} Lista de tareas
+ */
+export async function getTasks() {
+  return http.get('/tasks');
 }
 
-export function getTasks() {
-    return http.get('/api/v1/tasks');
+/**
+ * Crear una nueva tarea.
+ * @param {Object} task - Datos de la tarea
+ * @param {string} task.title - Título de la tarea
+ * @param {string} [task.detail] - Detalles opcionales
+ * @param {string} task.date - Fecha (YYYY-MM-DD)
+ * @param {string} task.time - Hora (HH:mm)
+ * @param {string} task.status - Estado de la tarea
+ * @returns {Promise<Object>} Tarea creada
+ */
+export async function createTask(task) {
+  return http.post('/tasks', task);
+}
+
+/**
+ * Actualizar una tarea existente.
+ * @param {string} id - ID de la tarea
+ * @param {Object} updates - Campos a actualizar
+ * @returns {Promise<Object>} Tarea actualizada
+ */
+export async function updateTask(id, updates) {
+  return http.put(`/tasks/${id}`, updates);
+}
+
+/**
+ * Eliminar una tarea.
+ * @param {string} id - ID de la tarea
+ * @returns {Promise<void>}
+ */
+export async function deleteTask(id) {
+  return http.del(`/tasks/${id}`);
 }

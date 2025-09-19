@@ -1,41 +1,34 @@
-import { http } from '../api/http.js';
+// src/services/userService.js
+import { http } from "../api/http.js";
 
 /**
- * Register a new user in the system.
- *
- * Sends a POST request to the backend API (`/api/v1/users`)
- * with the provided username and password.
- *
- * @async
- * @function registerUser
- * @param {Object} params - User registration data.
- * @param {string} params.username - The username of the new user.
- * @param {string} params.password - The password of the new user.
- * @returns {Promise<Object>} The created user object returned by the API.
- * @throws {Error} If the API responds with an error status or message.
- *
- * @example
- * try {
- *   const user = await registerUser({ username: "alice", password: "secret" });
- *   console.log("User created:", user);
- * } catch (err) {
- *   console.error("Registration failed:", err.message);
- * }
+ * Register a new user
  */
-
-
-
-export async function registerUser({ username, lastname, birthdate, email, password }) {
-  const payload = {
-    username: username?.trim(),
-    lastname: lastname?.trim(),
-    birthdate,            // YYYY-MM-DD (del <input type="date">)
-    email: email?.trim(),
-    password
-  };
-  return http.post('/api/v1/users', payload);
+export async function registerUser(userData) {
+  try {
+      return await http.post("/users", userData);
+  } catch (e) {
+    throw e;
+  }
 }
 
-export  function loginUser({ email, password }) {
-  return http.post('/auth/login', { email, password }); 
+/**
+ * Login user with email + password
+ */
+export async function loginUser(credentials) {
+  const res = await http.post("/auth/login", credentials);
+
+  // Si el backend devuelve { token, user }, lo guardamos
+  if (res?.token) {
+    localStorage.setItem("token", res.token);
+  }
+
+  return res;
+}
+
+/**
+ * Get current logged-in user profile
+ */
+export async function getProfile() {
+  return await http.get("/users/profile");
 }
