@@ -588,6 +588,8 @@ input [disabled] {
     opacity: .85;
 }
 
+.field-error { color:#d33; margin-top:4px; display:block; }
+
 
 
 *,

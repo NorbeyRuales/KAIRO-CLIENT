@@ -11,28 +11,39 @@
       <!-- Nombres -->
       <label class="kairo-label" for="rname">Ingresar nombres</label>
       <input class="kairo-input-line" id="rname" name="name" type="text" required autocomplete="name" />
+      <small id="errName" class="field-error" role="alert" aria-live="polite" hidden></small>
+
 
       <!-- Apellidos -->
       <label class="kairo-label" for="rlastname">Ingresar apellidos</label>
       <input class="kairo-input-line" id="rlastname" name="lastname" type="text" required autocomplete="family-name" />
+      <small id="errLast" class="field-error" role="alert" aria-live="polite" hidden></small>
+
 
       <!-- Fecha de nacimiento -->
       <label class="kairo-label" for="rbirthdate">Fecha de nacimiento</label>
       <input class="kairo-input-line" id="rbirthdate" name="birthdate" type="date" required max="2100-12-31" />
+      <small id="errBirth" class="field-error" role="alert" aria-live="polite" hidden></small>
 
 
       <!-- Correo -->
       <label class="kairo-label" for="remail">Ingresar correo</label>
       <input class="kairo-input-line" id="remail" name="email" type="email" required autocomplete="email" />
+      <small id="errEmail" class="field-error" role="alert" aria-live="polite" hidden></small>
+
 
       <!-- Contraseña -->
       <label class="kairo-label" for="rpassword">Ingresar contraseña</label>
       <input class="kairo-input-line" id="rpassword" name="password" type="password" required
         autocomplete="new-password" />
+      <small id="errPass" class="field-error" role="alert" aria-live="polite" hidden></small>
+
 
       <!--Confirmar contraseña-->
       <label class="kairo-label" for="rpassword2">Confirmar contraseña</label>
       <input class="kairo-input-line" id="rpassword2" name="password2" type="password" required />
+      <small id="errPass2" class="field-error" role="alert" aria-live="polite" hidden></small>
+
 
       <!-- Spinner de registro -->
       <div id="regSpinner" class="kairo-spinner" hidden aria-live="polite" aria-busy="true">
@@ -45,7 +56,7 @@
       <p class="kairo-link-row"><a class="kairo-link" href="#/login">Cancelar</a></p>
 
       <!-- Mensajes (JS) -->
-      <div id="regMsg" class="kairo-alert" hidden aria-live="polite"></div>
+      <div id="regMsg" class="kairo-alert" role="alert" aria-live="polite" hidden></div>
     </form>
   </div>
 </section>

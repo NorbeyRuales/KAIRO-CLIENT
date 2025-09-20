@@ -47,7 +47,10 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
 
   if (!res.ok) {
     const msg = payload?.message || payload?.error || `HTTP ${res.status}`;
-    throw new Error(msg);
+    const err = new Error(msg);
+    err.status = res.status;    
+    err.payload = payload;
+    throw err;
   }
 
   return payload;
