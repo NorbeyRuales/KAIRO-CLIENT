@@ -34,6 +34,12 @@
       <label class="kairo-label" for="rpassword2">Confirmar contraseña</label>
       <input class="kairo-input-line" id="rpassword2" name="password2" type="password" required />
 
+      <!-- Spinner de registro -->
+      <div id="regSpinner" class="kairo-spinner" hidden aria-live="polite" aria-busy="true">
+        <span class="kairo-spinner__dot" aria-hidden="true"></span>
+        <span class="kairo-spinner__text">Cargando...</span>
+      </div>
+
       <!-- Acciones -->
       <button class="kairo-btn kairo-btn-primary" type="submit">REGISTRARSE</button>
       <p class="kairo-link-row"><a class="kairo-link" href="#/login">Cancelar</a></p>

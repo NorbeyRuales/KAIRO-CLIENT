@@ -3,60 +3,43 @@ import { createTask, getTasks } from '../services/taskService.js';
 
 const app = document.getElementById('app');
 
-/**
- * Build a safe URL for fetching view fragments inside Vite (dev and build).
- * @param {string} name - The name of the view (without extension).
- * @returns {URL} The resolved URL for the view HTML file.
- */
+/** Build a safe URL for fetching view fragments */
 const viewURL = (name) => new URL(`../views/${name}.html`, import.meta.url);
 
-/**
- * Load an HTML fragment by view name and initialize its corresponding logic.
- * @async
- * @param {string} name - The view name to load (e.g., "home", "board", "login", "register", "forgot").
- * @throws {Error} If the view cannot be fetched.
- */
+/** Load an HTML fragment and init its logic */
 async function loadView(name) {
   const res = await fetch(viewURL(name));
   if (!res.ok) throw new Error(`Failed to load view: ${name}`);
   const html = await res.text();
   app.innerHTML = html;
-  //inicializa las funciones de cada vista
+
   if (name === 'home' || name === 'register') initHome();
   if (name === 'board') initBoard();
 
-  if (name === 'login' && typeof initLogin === 'function') initLogin();
-  if (name === 'forgot' && typeof initForgot === 'function') initForgot();
-  if (name === 'register' && typeof initRegister === 'function') initRegister();
-  if (name === 'update' && typeof initUpdate === 'function') initUpdate();
-  if (name === 'task-new' && typeof initTaskNew === 'function') initTaskNew();
+  if (name === 'login'   && typeof initLogin   === 'function') initLogin();
+  if (name === 'forgot'  && typeof initForgot  === 'function') initForgot?.();
+  if (name === 'register'&& typeof initRegister=== 'function') initRegister();
+  if (name === 'update'  && typeof initUpdate  === 'function') initUpdate?.();
+  if (name === 'task-new'&& typeof initTaskNew === 'function') initTaskNew();
 }
 
-/**
- * Initialize the hash-based router.
- * Attaches an event listener for URL changes and triggers the first render.
- */
+/** Router */
 export function initRouter() {
   window.addEventListener('hashchange', handleRoute);
-  handleRoute(); // first render
+  handleRoute();
 }
 
-/**
- * Handle the current route based on the location hash.
- * Fallback to 'home' if the route is unknown.
- */
 function handleRoute() {
-  const path = (location.hash.startsWith('#/') ? location.hash.slice(2) : '') || 'login';
+  const path  = (location.hash.startsWith('#/') ? location.hash.slice(2) : '') || 'login';
   const known = ['home', 'board', 'login', 'register', 'forgot', 'update', 'tasks/new'];
   const route = known.includes(path) ? path : 'login';
 
   const viewName = route === 'home' ? 'register' :
-    route === 'tasks/new' ? 'task-new' :
-      route;
+                   route === 'tasks/new' ? 'task-new' : route;
 
   const token = localStorage.getItem('token');
   if ((route === 'board' || route === 'tasks/new') && !token) return loadView('login');
-  if ((route === 'login' || route === 'register') && token) return loadView('board');
+  if ((route === 'login' || route === 'register') && token)   return loadView('board');
 
   loadView(viewName).catch(err => {
     console.error(err);
@@ -65,7 +48,6 @@ function handleRoute() {
 }
 
 /* ---- View-specific logic ---- */
-
 function initHome() {
   console.log('Home view loaded');
 }
@@ -75,15 +57,16 @@ function initRegister() {
   if (!form) return;
 
   // Inputs
-  const userInput  = document.getElementById('rname');        // username
-  const lastInput  = document.getElementById('rlastname');    // lastname
-  const birthInput = document.getElementById('rbirthdate');   // birthdate (YYYY-MM-DD)
-  const emailInput = document.getElementById('remail');       // email
-  const passInput  = document.getElementById('rpassword');    // password
-  const pass2Input = document.getElementById('rpassword2');   // confirmar contraseña (asegúrate de tener este input en el HTML)
+  const userInput  = document.getElementById('rname');       // username
+  const lastInput  = document.getElementById('rlastname');   // lastname
+  const birthInput = document.getElementById('rbirthdate');  // birthdate (input type="date")
+  const emailInput = document.getElementById('remail');      // email
+  const passInput  = document.getElementById('rpassword');   // password
+  const pass2Input = document.getElementById('rpassword2');  // confirm password
   const msg        = document.getElementById('regMsg');
+  const spinner    = document.getElementById('regSpinner');
 
-  // Límite de fecha para ≥13 años (permite todo el año)
+  // límites de fecha (permite todo el año de "hoy-13")
   if (birthInput) {
     const yearLimit = new Date().getUTCFullYear() - 13;
     birthInput.max = `${yearLimit}-12-31`;
@@ -91,6 +74,7 @@ function initRegister() {
   }
 
   const submitBtn = form.querySelector('button[type="submit"]');
+  if (submitBtn) submitBtn.disabled = true;
 
   const showMsg = (text) => {
     if (!msg) return;
@@ -98,11 +82,11 @@ function initRegister() {
     msg.textContent = text || '';
   };
 
-  // Fuerza mínima de contraseña
+  // fuerza mínima de contraseña
   const passStrong = (pwd) => (
     /[A-Z]/.test(pwd) &&
     /[a-z]/.test(pwd) &&
-    /\d/.test(pwd)    &&
+    /\d/.test(pwd) &&
     pwd.length >= 8
   );
 
@@ -116,8 +100,8 @@ function initRegister() {
       ok = false;
     }
 
-    // edad ≥ 13 (laxa por año)
-    if (birthInput.value && !isAtLeastYearsOldLoose(birthInput.value, 13)) {
+    // edad ≥ 13 (laxa por año, leyendo año real del input)
+    if (birthInput.value && !isAtLeastYearsOldLoose(birthInput.value, 13, birthInput)) {
       ok = false;
       showMsg('Debes tener al menos 13 años.');
     }
@@ -134,17 +118,18 @@ function initRegister() {
       showMsg('Las contraseñas no coinciden.');
     }
 
-    // si todo bien, limpia mensaje
     if (ok) showMsg('');
-
     if (submitBtn) submitBtn.disabled = !ok;
     return ok;
   };
 
-  // validar en tiempo real
   [userInput, lastInput, birthInput, emailInput, passInput, pass2Input]
     .forEach(el => el && el.addEventListener('input', validate));
-  validate(); // estado inicial del botón
+  validate();
+
+  // Spinner: mínimo visible y máximo de seguridad
+  const SPINNER_MIN_MS = 800;   // como mínimo 0.8s visible
+  const SPINNER_MAX_MS = 5000;  // nunca más de 5s
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -154,7 +139,7 @@ function initRegister() {
 
     const username  = userInput?.value.trim();
     const lastname  = lastInput?.value.trim();
-    const birthdate = birthInput?.value;      // YYYY-MM-DD
+    const birthdate = birthInput?.value;      // el input envía ISO aunque muestre DD/MM/YYYY
     const email     = emailInput?.value.trim();
     const password  = passInput?.value;
 
@@ -166,34 +151,66 @@ function initRegister() {
     const btn = form.querySelector('button[type="submit"]');
     if (btn) btn.disabled = true;
 
+    if (spinner) spinner.hidden = false;
+    const start = performance.now();
+    const guard = setTimeout(() => { if (spinner) spinner.hidden = true; }, SPINNER_MAX_MS);
+
     try {
       await registerUser({ username, lastname, birthdate, email, password });
+
+      // asegura visibilidad mínima del spinner
+      const elapsed = performance.now() - start;
+      const rest = Math.max(0, SPINNER_MIN_MS - elapsed);
+      if (rest) await new Promise(r => setTimeout(r, rest));
+
       if (msg) { msg.hidden = false; msg.textContent = 'Registro exitoso'; }
-      setTimeout(() => (location.hash = '#/board'), 600);
+      setTimeout(() => (location.hash = '#/login'), 400);
     } catch (err) {
+      const elapsed = performance.now() - start;
+      const rest = Math.max(0, SPINNER_MIN_MS - elapsed);
+      if (rest) await new Promise(r => setTimeout(r, rest));
+
       if (msg) { msg.hidden = false; msg.textContent = `No se pudo registrar: ${err.message}`; }
     } finally {
+      clearTimeout(guard);
+      if (spinner) spinner.hidden = true;
       if (btn) btn.disabled = false;
     }
   });
 }
 
-// Convierte "YYYY-MM-DD" a Date en UTC (evita off-by-one por husos horarios)
+/* Helpers de fecha */
 function parseISODateUTC(yyyyMmDd) {
   const [y, m, d] = (yyyyMmDd || '').split('-').map(Number);
   if (!y || !m || !d) return null;
   return new Date(Date.UTC(y, m - 1, d));
 }
 
-// >= 13 SOLO por año (validación laxa)
-function isAtLeastYearsOldLoose(birthStr, years = 13) {
-  const year = Number((birthStr || '').slice(0, 4));
-  if (!year) return false;
+// ≥ N años (laxa por año, robusta con valueAsDate y DD/MM/YYYY)
+function isAtLeastYearsOldLoose(birthStr, years = 13, inputEl) {
+  let birthYear;
+
+  // 1) Preferir valueAsDate del input type="date"
+  if (inputEl && inputEl.valueAsDate instanceof Date) {
+    birthYear = inputEl.valueAsDate.getUTCFullYear();
+  } else {
+    // 2) ISO YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(birthStr)) {
+      birthYear = Number(birthStr.slice(0, 4));
+    } else {
+      // 3) Intento DD/MM/YYYY o variantes
+      const parts = (birthStr || '').split(/[\/\-.]/).map(s => s.trim());
+      const y = parts.find(p => /^\d{4}$/.test(p));
+      birthYear = y ? Number(y) : NaN;
+    }
+  }
+
+  if (!birthYear) return false;
   const currentYear = new Date().getUTCFullYear();
-  return year <= (currentYear - years);
+  return birthYear <= (currentYear - years);
 }
 
-// ¿N años o más? (compara contra la "fecha corte" hoy - N años en UTC)
+// (Precisa al día) No la usamos ahora, pero se deja disponible
 function isAtLeastYearsOld(birthStr, years = 13) {
   const birth = parseISODateUTC(birthStr);
   if (!birth) return false;
@@ -204,7 +221,7 @@ function isAtLeastYearsOld(birthStr, years = 13) {
     now.getUTCMonth(),
     now.getUTCDate()
   ));
-  return birth <= cutoff; // nacido el mismo día/hace más tiempo ⇒ OK
+  return birth <= cutoff;
 }
 
 function initLogin() {
@@ -219,7 +236,7 @@ function initLogin() {
     e.preventDefault();
     if (msg) msg.textContent = '';
 
-    const email = emailInput?.value.trim();
+    const email    = emailInput?.value.trim();
     const password = passInput?.value.trim();
 
     if (!email || !password) {
@@ -229,11 +246,7 @@ function initLogin() {
 
     try {
       const data = await loginUser({ email, password });
-
-      // Guardar token en localStorage
       localStorage.setItem('token', data.token);
-
-      // Redirigir al tablero
       location.hash = '#/board';
     } catch (err) {
       if (msg) msg.textContent = `Error al iniciar sesión: ${err.message}`;
@@ -320,12 +333,8 @@ function initTaskNew() {
   });
 }
 
-/**
- * Initialize the "board" view.
- * Sets up the todo form, input, and list with create/remove/toggle logic.
- */
+/** Board */
 function initBoard() {
-  // Try legacy IDs first
   const formLegacy  = document.getElementById('todoForm');
   const inputLegacy = document.getElementById('newTodo');
   const list        = document.getElementById('todoList') || document.getElementById('notesList');
@@ -333,22 +342,17 @@ function initBoard() {
 
   const emptyState = document.getElementById('emptyState');
 
-  // === CARGAR TAREAS EN EL BOARD ===
   async function loadTasks() {
     try {
       const tasks = await getTasks();
-
-      // limpiar lista
       list.innerHTML = '';
 
       if (!Array.isArray(tasks) || tasks.length === 0) {
-        // no hay tareas: ocultar lista, mostrar empty
         list.hidden = true;
         if (emptyState) emptyState.hidden = false;
         return;
       }
 
-      // hay tareas: mostrar lista, ocultar empty
       list.hidden = false;
       if (emptyState) emptyState.hidden = true;
 
@@ -378,7 +382,6 @@ function initBoard() {
     }
   }
 
-  // llamada inicial
   loadTasks();
 
   const createBtn = document.getElementById('createBtn');
@@ -413,7 +416,6 @@ function initBoard() {
     });
   }
 
-  // Logout
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
@@ -422,13 +424,11 @@ function initBoard() {
     });
   }
 
-  // Buscador plegable + filtro
-  const searchForm = document.getElementById('searchForm');
+  const searchForm  = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
-  const searchBtn = document.getElementById('searchBtn');
+  const searchBtn   = document.getElementById('searchBtn');
 
   if (searchForm && searchInput && searchBtn) {
-    // empieza plegado
     searchForm.classList.add('is-compact');
 
     const compactIfEmpty = () => {
