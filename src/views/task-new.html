@@ -1,0 +1,103 @@
+<section id="taskNewPage" class="kairo-page" aria-label="Nueva tarea">
+  <header class="kairo-topbar" role="banner">
+    <a href="#/board" class="icon-btn" aria-label="Volver" title="Volver">
+      <span class="icon icon--back" aria-hidden="true"></span>
+    </a>
+    <h1 class="kairo-title">NUEVA TAREA</h1>
+    <span aria-hidden="true"></span>
+  </header>
+
+  <div class="kairo-auth kairo-auth--form">
+    <div class="kairo-auth-card kairo-card-form">
+      <!-- Región global para avisos generales -->
+      <div id="formLiveRegion" class="kairo-alert" role="alert" aria-live="polite" hidden></div>
+
+      <form id="taskForm" class="kairo-form" novalidate>
+        <!-- Título -->
+        <label class="kairo-label" for="taskTitle">Título</label>
+        <input
+          id="taskTitle"
+          name="title"
+          class="kairo-input-line"
+          type="text"
+          maxlength="50"
+          required
+          aria-describedby="errTitle"
+          autocomplete="off"
+          aria-invalid="false"
+        />
+        <small id="errTitle" class="field-error" role="alert" aria-live="polite" hidden></small>
+
+        <!-- Detalle -->
+        <label class="kairo-label" for="taskDetail">Detalle (opcional)</label>
+        <textarea
+          id="taskDetail"
+          name="detail"
+          class="kairo-input-line"
+          maxlength="500"
+          rows="4"
+          aria-describedby="errDetail"
+          aria-invalid="false"
+        ></textarea>
+        <!-- Sugerencia/ayuda (no aria-live porque no es error) -->
+        <small id="detailHelp" class="kairo-hint">Máximo 500 caracteres.</small>
+        <small id="errDetail" class="field-error" role="alert" aria-live="polite" hidden></small>
+
+        <!-- Fecha -->
+        <label class="kairo-label" for="taskDate">Fecha</label>
+        <input
+          id="taskDate"
+          name="date"
+          class="kairo-input-line"
+          type="date"
+          required
+          aria-describedby="errDate"
+          aria-invalid="false"
+        />
+        <small id="errDate" class="field-error" role="alert" aria-live="polite" hidden></small>
+
+        <!-- Hora -->
+        <label class="kairo-label" for="taskTime">Hora</label>
+        <input
+          id="taskTime"
+          name="time"
+          class="kairo-input-line"
+          type="time"
+          required
+          aria-describedby="errTime"
+          aria-invalid="false"
+        />
+        <small id="errTime" class="field-error" role="alert" aria-live="polite" hidden></small>
+
+        <!-- Estado -->
+        <label class="kairo-label" for="taskStatus">Estado</label>
+        <select
+          id="taskStatus"
+          name="status"
+          class="kairo-input-line"
+          required
+          aria-describedby="errStatus"
+          aria-invalid="false"
+        >
+          <option value="" selected disabled>Selecciona…</option>
+          <option value="todo">Por hacer</option>
+          <option value="doing">Haciendo</option>
+          <option value="done">Hecho</option>
+        </select>
+        <small id="errStatus" class="field-error" role="alert" aria-live="polite" hidden></small>
+
+        <!-- Botón + Spinner -->
+        <button id="taskSaveBtn" class="kairo-btn kairo-btn-primary" type="submit" disabled>Guardar</button>
+
+        <div id="taskSaving" class="kairo-spinner" role="status" aria-live="polite" hidden>
+          <span class="kairo-spinner__dot" aria-hidden="true"></span>
+          <span class="kairo-spinner__text">Guardando…</span>
+        </div>
+
+        <p class="kairo-link-row">
+          <a class="kairo-link" href="#/board">Cancelar</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</section>

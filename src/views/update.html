@@ -1,0 +1,48 @@
+<section id="updatePage" class="kairo-page" aria-label="Actualizar datos">
+    <!-- Topbar -->
+    <header class="kairo-topbar" role="banner">
+        <a href="#/board" class="icon-btn" aria-label="Volver" title="Volver">
+            <span class="icon icon--back" aria-hidden="true"></span>
+        </a>
+        <h1 class="kairo-title">KAIRO</h1>
+        <span aria-hidden="true"></span>
+    </header>
+
+    <div class="kairo-auth">
+        <div class="kairo-auth-card">
+            <h2 style="text-align:center; font-weight:800; margin:0 0 8px;">ACTUALIZA TUS DATOS</h2>
+
+            <h3 style="text-align:center; font-weight:800; margin:10px 0 6px;">DATOS ACTUALES</h3>
+
+            <label class="kairo-label" for="c-firstname">Nombres actuales:</label>
+            <input id="c-firstname" class="kairo-input-line" type="text" disabled aria-readonly="true" />
+
+            <label class="kairo-label" for="c-lastname">Apellidos actuales:</label>
+            <input id="c-lastname" class="kairo-input-line" type="text" disabled aria-readonly="true" />
+
+            <label class="kairo-label" for="c-age">Edad actual:</label>
+            <input id="c-age" class="kairo-input-line" type="number" disabled aria-readonly="true" />
+
+            <label class="kairo-label" for="c-email">Correo actual:</label>
+            <input id="c-email" class="kairo-input-line" type="email" disabled aria-readonly="true" />
+
+            <h3 style="text-align:center; font-weight:800; margin:18px 0 6px;">NUEVOS DATOS</h3>
+
+            <input id="firstname" class="kairo-input-line" type="text" placeholder="Ingrese nuevos nombres:"
+                minlength="2" />
+            <input id="lastname" class="kairo-input-line" type="text" placeholder="Ingresar nuevos apellidos:"
+                minlength="2" />
+            <input id="age" class="kairo-input-line" type="number" inputmode="numeric"
+                placeholder="Ingresar nueva edad:" min="0" max="120" />
+            <input id="email" class="kairo-input-line" type="email" placeholder="Ingresar nuevo correo:" />
+
+            <button id="updateSubmit" class="kairo-btn kairo-btn-primary" type="button">ACTUALIZAR</button>
+
+            <p class="kairo-link-row">
+                <a class="kairo-link" href="#/board">Regresar</a>
+            </p>
+
+            <div id="updateMsg" class="kairo-alert" hidden></div>
+        </div>
+    </div>
+</section>

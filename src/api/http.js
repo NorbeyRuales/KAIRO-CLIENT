@@ -3,7 +3,10 @@
  * 
  * Loaded from Vite environment variables (`VITE_API_URL`).
  */
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
+/**const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';*/
+
+const ORIGIN = (import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '');
+const BASE_URL = ORIGIN + '/api/v1';
 
 /**
  * Generic HTTP request helper using Fetch API.
@@ -21,11 +24,19 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
  * @returns {Promise<any>} The parsed response payload (JSON if available).
  * @throws {Error} If the response is not OK (status >= 400), throws with message.
  */
+
+// Log en dev para verificar
+if (import.meta.env?.DEV) console.log('🔧 BASE_URL =', BASE_URL);
+
 async function request(path, { method = 'GET', headers = {}, body } = {}) {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const safePath = path.startsWith('/') ? path : `/${path}`;
+  const token = localStorage.getItem('token');
+
+  const res = await fetch(`${BASE_URL}${safePath}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -36,7 +47,10 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
 
   if (!res.ok) {
     const msg = payload?.message || payload?.error || `HTTP ${res.status}`;
-    throw new Error(msg);
+    const err = new Error(msg);
+    err.status = res.status;    
+    err.payload = payload;
+    throw err;
   }
 
   return payload;

@@ -4,29 +4,41 @@
             <img src="/LogoKairo.jpg" alt="Kairo — Organiza. Edita. Avanza." class="kairo-logo-img">
         </div>
 
-        <form id="loginForm" class="kairo-form">
+        <form id="loginForm" class="kairo-form" novalidate>
             <label class="kairo-label" for="lemail">Usuario</label>
             <input class="kairo-input-line" id="lemail" name="email" type="email" placeholder="usuario@correo.com"
-                required>
+                required autocomplete="username" />
 
             <label class="kairo-label" for="lpassword">Contraseña</label>
             <input class="kairo-input-line" id="lpassword" name="password" type="password" placeholder="••••••••"
-                required>
+                required autocomplete="current-password" />
 
             <label class="kairo-check">
                 <input type="checkbox" id="termsCheck">
                 <span>Acepto términos y condiciones</span>
             </label>
 
-            <button class="kairo-btn kairo-btn-primary" type="submit">INGRESAR</button>
+            <button id="loginSubmit" class="kairo-btn kairo-btn-primary" type="submit" disabled>
+                INGRESAR
+            </button>
+
+            <div id="loginSpinner" class="kairo-spinner" hidden>
+                <span class="kairo-spinner__dot" aria-hidden="true"></span>
+                <span class="kairo-spinner__text">Verificando…</span>
+            </div>
+
+            <p class="kairo-link-row" style="margin-top:8px;">
+                ¿Olvidaste tu contraseña?
+                <a href="#/forgot" class="kairo-link">Recupérala aquí</a>
+            </p>
 
             <p class="kairo-link-row">
                 ¿Aún no tienes cuenta?
                 <a href="#/register" class="kairo-link">Regístrate aquí</a>
             </p>
 
-            <!-- Mensajes de estado (útil para la rúbrica de heurísticas) -->
-            <div id="loginMsg" class="kairo-alert" hidden></div>
+            <!-- Región de mensajes accesible -->
+            <div id="loginMsg" class="kairo-alert" role="alert" aria-live="polite" hidden></div>
         </form>
     </div>
 </section>
