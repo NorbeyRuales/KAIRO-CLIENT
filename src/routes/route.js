@@ -416,7 +416,7 @@ function initTaskNew() {
     saveBtn.disabled = true;
     saving.hidden = false;
     if (live) { live.hidden = true; live.textContent = ''; }
-    const autoHide = setTimeout(() => { saving.hidden = true; }, 2000);
+    const autoHide = setTimeout(() => { saving.hidden = true; }, 3000);
 
     try {
       await createTask({
