@@ -32,6 +32,15 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
   const safePath = path.startsWith('/') ? path : `/${path}`;
   const token = localStorage.getItem('token');
 
+  console.log('➡️ Enviando request', method, path, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...headers,
+    },
+  });
+  
+
   const res = await fetch(`${BASE_URL}${safePath}`, {
     method,
     headers: {

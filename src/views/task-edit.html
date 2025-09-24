@@ -1,16 +1,16 @@
-<section id="taskNewPage" class="kairo-page" aria-label="Nueva tarea">
+<section id="taskEditPage" class="kairo-page" aria-label="Editar tarea">
   <header class="kairo-topbar" role="banner">
     <a href="#/board" class="icon-btn" aria-label="Volver" title="Volver">
       <span class="icon icon--back" aria-hidden="true"></span>
     </a>
-    <h1 class="kairo-title">NUEVA TAREA</h1>
+    <h1 class="kairo-title">EDITAR TAREA</h1>
     <span aria-hidden="true"></span>
   </header>
 
   <div class="kairo-auth kairo-auth--form">
     <div class="kairo-auth-card kairo-card-form">
-      <!-- Región global para avisos generales -->
-      <div id="formLiveRegion" class="kairo-alert" role="alert" aria-live="polite" hidden></div>
+      <!-- Región global para avisos -->
+      <div id="editFormLiveRegion" class="kairo-alert" role="alert" aria-live="polite" hidden></div>
 
       <form id="taskForm" class="kairo-form" novalidate>
         <!-- Título -->
@@ -39,7 +39,6 @@
           aria-describedby="errDetail"
           aria-invalid="false"
         ></textarea>
-        <!-- Sugerencia/ayuda (no aria-live porque no es error) -->
         <small id="detailHelp" class="kairo-hint">Máximo 500 caracteres.</small>
         <small id="errDetail" class="field-error" role="alert" aria-live="polite" hidden></small>
 
@@ -79,15 +78,15 @@
           aria-describedby="errStatus"
           aria-invalid="false"
         >
-          <option value="" selected disabled>Selecciona un estado</option>
-          <option value="pendiente">Pendiente</option>
-          <option value="en progreso">En progreso</option>
-          <option value="completada">Completada</option>
+          <option value="" selected disabled>Selecciona…</option>
+          <option value="todo">Por hacer</option>
+          <option value="doing">Haciendo</option>
+          <option value="done">Hecho</option>
         </select>
         <small id="errStatus" class="field-error" role="alert" aria-live="polite" hidden></small>
 
         <!-- Botón + Spinner -->
-        <button id="taskSaveBtn" class="kairo-btn kairo-btn-primary" type="submit" disabled>Guardar</button>
+        <button id="taskSaveBtn" class="kairo-btn kairo-btn-primary" type="submit">Guardar cambios</button>
 
         <div id="taskSaving" class="kairo-spinner" role="status" aria-live="polite" hidden>
           <span class="kairo-spinner__dot" aria-hidden="true"></span>

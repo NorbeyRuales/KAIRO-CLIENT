@@ -588,7 +588,11 @@ input [disabled] {
     opacity: .85;
 }
 
-.field-error { color:#d33; margin-top:4px; display:block; }
+.field-error {
+    color: #d33;
+    margin-top: 4px;
+    display: block;
+}
 
 
 
@@ -596,4 +600,351 @@ input [disabled] {
 *::before,
 *::after {
     box-sizing: border-box
+}
+
+/* =========================================================
+   (NUEVO) ESTILOS ADITIVOS PARA TAREAS COMO "CHIPS"
+   Scoping: #homePage y #notesList para no afectar otros .kairo-list
+   ========================================================= */
+
+/* Icono extra usado en la acción de eliminar (ajusta la ruta si es necesario) */
+.icon--trash {
+    -webkit-mask: url('/trash.svg') no-repeat center / contain;
+    mask: url('/trash.svg') no-repeat center / contain;
+}
+
+/* Layout SOLO del listado de la home */
+#homePage #notesList.kairo-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px;
+}
+
+/* Fallback para ítems legacy .todo (mantiene lista vertical si aún los usas) */
+#homePage #notesList .todo {
+    width: 100%;
+}
+
+/* Contenedor de cada tarea (li) */
+#homePage .kairo-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+}
+
+/* Botón/Chip de tarea */
+#homePage .kairo-chip {
+    /* color base; estados lo sobreescriben */
+    --status: #64748b;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 9999px;
+    border: 1px solid var(--k-border);
+    /* fallback */
+    background: #fff;
+    /* fallback */
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
+    font: 600 0.9rem/1.1 var(--k-font);
+    color: var(--k-text);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+/* Mejora visual cuando el navegador soporta color-mix */
+@supports (color: color-mix(in oklab, white, black)) {
+    #homePage .kairo-chip {
+        border-color: color-mix(in oklab, var(--status) 30%, var(--k-border));
+        background: color-mix(in oklab, var(--status) 12%, #ffffff);
+    }
+}
+
+#homePage .kairo-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+}
+
+#homePage .kairo-chip:focus-visible {
+    outline: 3px solid color-mix(in oklab, var(--status) 45%, transparent);
+    outline-offset: 2px;
+}
+
+/* Texto con elipsis */
+#homePage .kairo-chip__text {
+    max-width: 26ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Botón de acción (por ejemplo, eliminar) */
+#homePage .kairo-chip__action {
+    inline-size: 26px;
+    block-size: 26px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--k-border);
+    /* fallback */
+    background: #fff;
+    /* fallback */
+    cursor: pointer;
+    transition: background .15s ease, transform .15s ease;
+}
+
+@supports (color: color-mix(in oklab, white, black)) {
+    #homePage .kairo-chip__action {
+        border-color: color-mix(in oklab, var(--status) 35%, var(--k-border));
+        background: #fff;
+    }
+}
+
+#homePage .kairo-chip__action:hover {
+    transform: translateY(-1px);
+    background: color-mix(in oklab, var(--status) 8%, #fff);
+}
+
+#homePage .kairo-chip__action .icon {
+    inline-size: 1rem;
+    block-size: 1rem;
+}
+
+/* Estados */
+#homePage .kairo-note.is-todo .kairo-chip {
+    --status: #2563eb;
+}
+
+/* azul */
+#homePage .kairo-note.is-doing .kairo-chip {
+    --status: #f59e0b;
+}
+
+/* ámbar */
+#homePage .kairo-note.is-done .kairo-chip {
+    --status: #10b981;
+}
+
+/* verde */
+#homePage .kairo-note.is-overdue .kairo-chip {
+    --status: #ef4444;
+}
+
+/* rojo */
+
+#homePage .kairo-note.is-done .kairo-chip__text {
+    text-decoration: line-through;
+    opacity: .85;
+}
+
+/* Dark mode (automático) */
+@media (prefers-color-scheme: dark) {
+    #homePage .kairo-chip {
+        color: #e5e7eb;
+        background: #0b0f17;
+        border-color: #253041;
+        box-shadow: none;
+    }
+
+    #homePage .kairo-chip__action {
+        background: #0b0f17;
+        border-color: #253041;
+    }
+
+    /* ====== Icono para botón eliminar ====== */
+    .icon--trash {
+        -webkit-mask: url('/trash.svg') no-repeat center / contain;
+        mask: url('/trash.svg') no-repeat center / contain;
+    }
+
+    /* ====== Barra de acciones fuera de las cards ====== */
+    #homePage .k-board-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 6px 12px;
+    }
+
+    /* ====== Grid de 3 columnas ====== */
+    #homePage .k-board-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding: 0 4px 8px;
+    }
+
+    @media (max-width: 980px) {
+        #homePage .k-board-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 620px) {
+        #homePage .k-board-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* ====== Card de cada columna ====== */
+    #homePage .k-col-card {
+        background: #fff;
+        border: 1px solid var(--k-border);
+        border-radius: 10px;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        min-height: 160px;
+    }
+
+    #homePage .k-col-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 4px 6px 8px;
+        border-bottom: 1px solid #eee;
+    }
+
+    #homePage .k-col-title {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: .3px;
+        color: #222;
+        text-transform: uppercase;
+    }
+
+    #homePage .k-col-count {
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        display: inline-grid;
+        place-items: center;
+        border-radius: 999px;
+        background: #efefef;
+        border: 1px solid var(--k-border);
+        font-size: 12px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    #homePage .kairo-col-empty {
+        margin: 10px 6px 6px;
+        color: #777;
+        font-size: 13px;
+    }
+
+    /* ====== Listas dentro de cada card ====== */
+    #homePage .k-col-card .kairo-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px 6px;
+        margin: 0;
+        list-style: none;
+    }
+
+    /* ====== Chips de tareas ====== */
+    #homePage .kairo-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        max-width: 100%;
+    }
+
+    #homePage .kairo-chip {
+        --status: #64748b;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 9999px;
+        border: 1px solid var(--k-border);
+        background: #fff;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
+        font: 600 0.9rem/1.1 var(--k-font);
+        color: var(--k-text);
+        cursor: pointer;
+        transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+
+    @supports (color: color-mix(in oklab, white, black)) {
+        #homePage .kairo-chip {
+            border-color: color-mix(in oklab, var(--status) 30%, var(--k-border));
+            background: color-mix(in oklab, var(--status) 12%, #fff);
+        }
+    }
+
+    #homePage .kairo-chip:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+    }
+
+    #homePage .kairo-chip:focus-visible {
+        outline: 3px solid color-mix(in oklab, var(--status) 45%, transparent);
+        outline-offset: 2px;
+    }
+
+    #homePage .kairo-chip__text {
+        max-width: 26ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #homePage .kairo-chip__action {
+        inline-size: 26px;
+        block-size: 26px;
+        display: inline-grid;
+        place-items: center;
+        border-radius: 8px;
+        border: 1px solid var(--k-border);
+        background: #fff;
+        cursor: pointer;
+        transition: background .15s ease, transform .15s ease;
+    }
+
+    @supports (color: color-mix(in oklab, white, black)) {
+        #homePage .kairo-chip__action {
+            border-color: color-mix(in oklab, var(--status) 35%, var(--k-border));
+        }
+    }
+
+    #homePage .kairo-chip__action:hover {
+        transform: translateY(-1px);
+        background: color-mix(in oklab, var(--status) 8%, #fff);
+    }
+
+    #homePage .kairo-chip__action .icon {
+        inline-size: 1rem;
+        block-size: 1rem;
+    }
+
+    /* Estados de color */
+    #homePage .kairo-note.is-todo .kairo-chip {
+        --status: #2563eb;
+    }
+
+    /* Pendiente */
+    #homePage .kairo-note.is-doing .kairo-chip {
+        --status: #f59e0b;
+    }
+
+    /* En progreso */
+    #homePage .kairo-note.is-done .kairo-chip {
+        --status: #10b981;
+    }
+
+    /* Completada */
+
+    #homePage .kairo-note.is-done .kairo-chip__text {
+        text-decoration: line-through;
+        opacity: .85;
+    }
+
+
 }

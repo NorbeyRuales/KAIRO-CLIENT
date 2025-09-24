@@ -40,3 +40,12 @@ export async function updateTask(id, updates) {
 export async function deleteTask(id) {
   return http.del(`/tasks/${id}`);
 }
+
+/**
+ * Obtener una tarea por ID.
+ * @param {string} id - ID de la tarea
+ * @returns {Promise<Object>} Tarea encontrada
+ */
+export async function getTaskById(id) {
+  return http.get(`/tasks/${id}`);
+}
