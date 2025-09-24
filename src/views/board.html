@@ -3,6 +3,7 @@
     <button id="logoutBtn" class="icon-btn" aria-label="Cerrar sesión" title="Cerrar sesión">
       <span class="icon icon--logout" aria-hidden="true"></span>
     </button>
+
     <h1 class="kairo-title">KAIRO</h1>
 
     <!-- Lupa a la derecha (input plegable) -->
@@ -13,9 +14,8 @@
       </button>
     </form>
 
-
-    <button id="profileBtn" class="icon-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="profileMenu"
-      aria-label="Opciones de cuenta" title="Cuenta">
+    <button id="profileBtn" class="icon-btn" aria-haspopup="menu" aria-expanded="false"
+            aria-controls="profileMenu" aria-label="Opciones de cuenta" title="Cuenta">
       <span class="icon icon--user" aria-hidden="true"></span>
     </button>
     <nav id="profileMenu" role="menu" hidden>
@@ -26,24 +26,70 @@
   <main class="kairo-main">
     <div class="kairo-auth kairo-auth--board">
       <div class="kairo-auth-card kairo-card-board">
-        <div class="kairo-board" role="region" aria-label="Tus notas">
-          <ul id="notesList" class="kairo-list" hidden></ul>
-          <p id="emptyState" class="kairo-empty">Crea tu primera nota</p>
+
+        <!-- ===== Barra de acciones (FUERA de las cards de columnas) ===== -->
+        <div class="k-board-toolbar" aria-label="Acciones">
+          <div class="k-board-actions-left">
+            <button id="calendarBtn" class="icon-btn" aria-label="Abrir calendario">
+              <span class="icon icon--calendar" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="k-board-actions-right">
+            <button id="createBtn" class="kairo-fab" aria-label="Crear nota">
+              <span class="icon icon--noteadd" aria-hidden="true"></span>
+            </button>
+          </div>
         </div>
 
-        <!-- Footer interno de la tarjeta -->
-        <div class="kairo-card-footer">
-          <button id="calendarBtn" class="icon-btn" aria-label="Abrir calendario">
-            <span class="icon icon--calendar" aria-hidden="true"></span>
-          </button>
-          <span class="kairo-bottom-hint">Sin notas</span>
-          <button id="createBtn" class="kairo-fab" aria-label="Crear nota">
-                <span class="icon icon--noteadd" aria-hidden="true"></span>
-          </button>
+        <!-- ===== Tablero con TRES columnas ===== -->
+        <div class="k-board-grid" role="region" aria-label="Tus notas">
+          <!-- Columna: Pendientes -->
+          <section class="k-col-card" aria-labelledby="colTodoTitle">
+            <header class="k-col-header">
+              <h2 id="colTodoTitle" class="k-col-title">Pendientes</h2>
+              <span class="k-col-count" id="todoCount">0</span>
+            </header>
+            <ul id="todoList" class="kairo-list"></ul>
+            <p class="kairo-col-empty" id="emptyTodo">Sin pendientes</p>
+          </section>
+
+          <!-- Columna: En progreso -->
+          <section class="k-col-card" aria-labelledby="colDoingTitle">
+            <header class="k-col-header">
+              <h2 id="colDoingTitle" class="k-col-title">En progreso</h2>
+              <span class="k-col-count" id="doingCount">0</span>
+            </header>
+            <ul id="doingList" class="kairo-list"></ul>
+            <p class="kairo-col-empty" id="emptyDoing">Nada en progreso</p>
+          </section>
+
+          <!-- Columna: Completadas -->
+          <section class="k-col-card" aria-labelledby="colDoneTitle">
+            <header class="k-col-header">
+              <h2 id="colDoneTitle" class="k-col-title">Completadas</h2>
+              <span class="k-col-count" id="doneCount">0</span>
+            </header>
+            <ul id="doneList" class="kairo-list"></ul>
+            <p class="kairo-col-empty" id="emptyDone">Aún no completas tareas</p>
+          </section>
         </div>
+
+        <!-- Template para cada nota como “chip” -->
+        <template id="noteItemTemplate">
+          <li class="kairo-note is-todo" data-id="">
+            <button class="kairo-chip" data-action="edit" aria-label="Editar nota">
+              <span class="kairo-chip__text"></span>
+            </button>
+            <button class="kairo-chip__action" data-action="delete" aria-label="Eliminar nota">
+              <span class="icon icon--trash" aria-hidden="true"></span>
+            </button>
+          </li>
+        </template>
+
+        <!-- (Compat) lista antigua oculta para no romper nada que la consulte -->
+        <ul id="notesList" class="kairo-list" hidden></ul>
+        <p id="emptyState" class="kairo-empty" hidden>Crea tu primera nota</p>
       </div>
     </div>
   </main>
-
-
 </section>
