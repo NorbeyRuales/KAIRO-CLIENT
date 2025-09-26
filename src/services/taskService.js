@@ -1,51 +1,26 @@
 import { http } from '../api/http.js';
 
-/**
- * Obtener todas las tareas del usuario autenticado.
- * @returns {Promise<Array>} Lista de tareas
- */
+/** Obtener todas las tareas del usuario autenticado. */
 export async function getTasks() {
   return http.get('/tasks');
 }
 
-/**
- * Crear una nueva tarea.
- * @param {Object} task - Datos de la tarea
- * @param {string} task.title - Título de la tarea
- * @param {string} [task.detail] - Detalles opcionales
- * @param {string} task.date - Fecha (YYYY-MM-DD)
- * @param {string} task.time - Hora (HH:mm)
- * @param {string} task.status - Estado de la tarea
- * @returns {Promise<Object>} Tarea creada
- */
+/** Crear una nueva tarea. */
 export async function createTask(task) {
   return http.post('/tasks', task);
 }
 
-/**
- * Actualizar una tarea existente.
- * @param {string} id - ID de la tarea
- * @param {Object} updates - Campos a actualizar
- * @returns {Promise<Object>} Tarea actualizada
- */
+/** Actualizar una tarea existente. */
 export async function updateTask(id, updates) {
   return http.put(`/tasks/${id}`, updates);
 }
 
-/**
- * Eliminar una tarea.
- * @param {string} id - ID de la tarea
- * @returns {Promise<void>}
- */
+/** Eliminar una tarea. */
 export async function deleteTask(id) {
   return http.del(`/tasks/${id}`);
 }
 
-/**
- * Obtener una tarea por ID.
- * @param {string} id - ID de la tarea
- * @returns {Promise<Object>} Tarea encontrada
- */
+/** Obtener una tarea por ID. */
 export async function getTaskById(id) {
   return http.get(`/tasks/${id}`);
 }

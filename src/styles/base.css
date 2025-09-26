@@ -1,1147 +1,307 @@
-/* === KAIRO base === */
-:root {
-    --k-text: #111;
-    --k-muted: #666;
-    --k-line: #ddd;
-    --k-border: #ddd;
-    --k-btn: #333;
-    --k-btn-hover: #555;
-    --k-bg: #f7f7f7;
-    --k-font: 'Roboto', Arial, sans-serif;
-}
-
-html,
-body {
-    font-family: var(--k-font);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-button,
-input,
-select,
-textarea {
-    font-family: inherit
-}
-
-
-
-.kairo-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 0 10px;
-
-}
-
-.kairo-logo-img {
-    display: block;
-    margin: 0 auto 12px;
-    width: clamp(180px, 45vw, 340px);
-    height: auto;
-    max-width: 100%;
-    border-radius: 15%;
-}
-
-/* Tamaño y color del icono */
-.icon {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    background-color: currentColor;
-}
-
-/* */
-
-.icon--logout {
-    -webkit-mask: url('/logout.svg') no-repeat center / contain;
-    mask: url('/logout.svg') no-repeat center / contain;
-}
-
-.icon--user {
-    -webkit-mask: url('/user.svg') no-repeat center / contain;
-    mask: url('/user.svg') no-repeat center / contain;
-}
-
-.icon--search {
-    -webkit-mask: url('/search.svg') no-repeat center / contain;
-    mask: url('/search.svg') no-repeat center / contain;
-}
-
-.icon--back {
-    -webkit-mask: url('/back.svg') no-repeat center / contain;
-    mask: url('/back.svg') no-repeat center / contain;
-}
-
-.icon--noteadd {
-    -webkit-mask: url('/note-add.svg') no-repeat center / contain;
-    mask: url('/note-add.svg') no-repeat center / contain;
-}
-
-.icon--calendar {
-    -webkit-mask: url('/calendar.svg') no-repeat center / contain;
-    mask: url('/calendar.svg') no-repeat center / contain;
-}
-
-
-/* tamaño del icono dentro del FAB */
-.kairo-fab .icon {
-    width: 40px;
-    height: 40px;
-    background-color: currentColor;
-    /* hereda color del botón */
-}
-
-/* button color */
-.icon-btn {
-    color: #333;
-}
-
-.icon-btn:hover {
-    color: #000;
-}
-
-
-
-
-
-/* ---- Auth card ---- */
-.kairo-auth {
-    min-height: calc(100vh - 48px);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 24px;
-    background: transparent;
-    color: var(--k-text);
-}
-
-.kairo-auth-card {
-    width: min(420px, 92vw);
-    background: #fff;
-    border: 1px solid var(--k-border);
-    border-radius: 8px;
-    padding: 24px 24px 28px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
-}
-
-.kairo-label {
-    display: block;
-    margin: 12px 0 6px;
-    font-size: 14px;
-    color: #555
-}
-
-.kairo-input-line {
-    display: block;
-    width: 100%;
-    margin-top: 5px;
-    padding: 10px;
-    font-size: 14px;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    border-bottom: 1px solid var(--k-line);
-}
-
-.kairo-input-line:focus {
-    border-bottom-color: #555
-}
-
-input[readonly],
-input [disabled] {
-    background: #f1f1f1;
-    cursor: not-allowed
-}
-
-.kairo-btn {
-    display: block;
-    width: 100%;
-    border: none;
-    border-radius: 4px;
-    padding: 12px 10px;
-    margin-top: 20%;
-    font-weight: 700;
-    letter-spacing: .3px;
-    cursor: pointer
-}
-
-.kairo-btn[disabled] {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-.kairo-btn-primary {
-    background: var(--k-btn);
-    color: #fff
-}
-
-.kairo-btn-primary:hover {
-    background: var(--k-btn-hover)
-}
-
-.kairo-link-row {
-    text-align: center;
-    margin-top: 14px;
-    font-size: 13px;
-    color: var(--k-muted)
-}
-
-.kairo-link {
-    color: #333;
-    text-decoration: underline
-}
-
-.kairo-alert {
-    margin-top: 10px;
-    padding: 10px 12px;
-    border: 1px solid var(--k-border);
-    border-radius: 6px;
-    font-size: 13px
-}
-
-/* ========= BOARD ========= */
-.kairo-page {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: var(--k-bg)
-}
-
-/* Topbar */
-.kairo-topbar {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    background: #cfcfcf;
-    border-bottom: 1px solid #bdbdbd;
-}
-
-.kairo-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: .6px;
-}
-
-.icon-btn {
-    display: grid;
-    place-items: center;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border-radius: 8px;
-    border: 1px solid #bdbdbd;
-    background: #e6e6e6;
-    color: #222;
-    cursor: pointer;
-}
-
-.icon-btn .icon {
-    width: 20px;
-    height: 20px;
-    background-color: currentColor;
-}
-
-
-
-
-
-/* ===== Dropdown de perfil ===== */
-#profileMenu {
-    position: absolute;
-    right: 8px;
-    top: calc(100% + 6px);
-    min-width: 220px;
-
-    background: #fff;
-    /* panel blanco */
-    color: var(--k-text);
-    border: 1px solid var(--k-border);
-    border-radius: 8px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, .12);
-    padding: 6px;
-    z-index: 1000;
-
-    /* animación de aparición */
-    animation: kMenuIn .12s ease-out;
-}
-
-/* respeta el atributo [hidden] que activas desde JS */
-#profileMenu[hidden] {
-    display: none !important;
-}
-
-/* “triangulito” que sale del botón */
-#profileMenu::before {
-    content: "";
-    position: absolute;
-    right: 16px;
-    /* alinea con el botón de perfil */
-    top: -6px;
-    width: 10px;
-    height: 10px;
-    background: #fff;
-    border-left: 1px solid var(--k-border);
-    border-top: 1px solid var(--k-border);
-    transform: rotate(45deg);
-}
-
-/* items del menú */
-#profileMenu a[role="menuitem"] {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    padding: 10px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    color: inherit;
-    font-size: 14px;
-    line-height: 1.1;
-    cursor: pointer;
-}
-
-/* hover, focus, active */
-#profileMenu a[role="menuitem"]:hover {
-    background: #f1f1f1;
-}
-
-#profileMenu a[role="menuitem"]:focus-visible {
-    outline: 2px solid #5b9dd9;
-    outline-offset: 2px;
-}
-
-#profileMenu a[role="menuitem"]:active {
-    background: #e7e7e7;
-}
-
-/* separador  */
-#profileMenu .k-sep {
-    height: 1px;
-    background: var(--k-border);
-    margin: 6px 8px;
-}
-
-/* animación */
-@keyframes kMenuIn {
-    from {
-        opacity: 0;
-        transform: translateY(-4px) scale(.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
-
-/* Buscador plegable (lupa a la derecha del topbar) */
-#searchForm {
-    margin-left: auto;
-    /* se pega a la derecha */
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-#searchForm.is-compact {
-    padding: 0;
-    background: transparent
-}
-
-#searchForm.is-compact #searchInput {
-    width: 0;
-    opacity: 0;
-    padding: 0;
-    margin: 0;
-    border: 0;
-    pointer-events: none;
-    transition: width .2s ease, opacity .2s ease;
-}
-
-#searchBtn {
-    width: 28px;
-    height: 28px;
-    border-radius: 20%;
-    border: 1px solid var(--k-border);
-    background: #efefef;
-    color: #333;
-    cursor: pointer;
-}
-
-#searchForm:not(.is-compact) {
-    background: #cfcfcf;
-    border-radius: 2px;
-    padding: 6px 40px 6px 10px;
-}
-
-#searchForm #searchInput {
-    width: 220px;
-    max-width: 36vw;
-    opacity: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 14px;
-    color: #222;
-    transition: width .2s ease, opacity .2s ease;
-}
-
-#searchForm:not(.is-compact) #searchBtn {
-    position: absolute;
-    right: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/* Contenido */
-.kairo-board {
-    flex: 1;
-    padding: 8px 12px
-}
-
-.kairo-empty {
-    margin-top: 28vh;
-    text-align: center;
-    color: #222
-}
-
-.kairo-list {
-    list-style: none;
-    margin: 8px 0 0;
-    padding: 0
-}
-
-.kairo-list .todo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .75rem;
-    padding: 10px 6px;
-    border-bottom: 1px solid #eee
-}
-
-.kairo-list .todo.completed span {
-    color: #999;
-    text-decoration: line-through
-}
-
-.kairo-list .remove {
-    border: none;
-    background: transparent;
-    text-decoration: underline;
-    font-size: 12px;
-    color: #333;
-    cursor: pointer
-}
-
-/* Bottom bar */
-.kairo-bottombar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 12px;
-    background: transparent;
-}
-
-.kairo-bottom-hint {
-    color: #a4a2a2;
-    font-size: 14px
-}
-
-.kairo-fab {
-    width: 44px;
-    height: 44px;
-    border: none;
-    background: transparent;
-    color: #111;
-    font-size: 32px;
-    line-height: 44px;
-    cursor: pointer
-}
-
-#calendarBtn {
-    width: 34px;
-    height: 28px;
-    border-radius: 4px;
-    border: 1px solid #d0d0d0;
-    background: #efefef;
-    cursor: pointer
-}
-
-/* ===== Board dentro de tarjeta ===== */
-.kairo-main {
-    flex: 1;
-}
-
-.kairo-auth.kairo-auth--board {
-    align-items: flex-start;
-    padding: 25px 25px;
-}
-
-.kairo-auth-card.kairo-card-board {
-    width: min(920px, 94vw);
-    padding: 16px 16px 8px;
-}
-
-.kairo-card-board .kairo-board {
-    max-height: calc(100vh - 180px);
-    overflow: auto;
-    padding: 8px 4px;
-}
-
-/* “footer” interno de la tarjeta (calendario, texto, +) */
-.kairo-card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 10px 4px 4px;
-    border-top: 1px solid var(--k-border);
-    margin-top: 6px;
-}
-
-@media (max-width: 640px) {
-    .kairo-auth-card.kairo-card-board {
-        width: min(100%, 94vw);
-        padding: 12px 12px 6px;
-    }
-
-}
-
-/* Card para páginas de formulario (tasks/new, etc.) */
-.kairo-auth.kairo-auth--form {
-    align-items: flex-start;
-    padding: 24px 16px;
-}
-
-.kairo-auth-card.kairo-card-form {
-    width: min(620px, 94vw);
-    padding: 20px 20px 16px;
-}
-
-.kairo-form .kairo-btn {
-    margin-top: 30px;
-}
-
-.kairo-check {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 20px 0 10px;
-    font-size: 14px;
-    color: var(--k-text);
-}
-
-.kairo-spinner {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    padding: 10px 12px;
-    margin: 10px 0 6px;
-    border: 1px solid var(--k-border);
-    border-radius: 6px;
-    background: #fff;
-    font-size: 14px;
-    color: #333;
-}
-
-.kairo-spinner[hidden] {
-    display: none !important;
-}
-
-.kairo-spinner__dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    border-top-color: #333;
-    animation: kSpin .8s linear infinite;
-}
-
-@keyframes kSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.kairo-spinner__text {
-    opacity: .85;
-}
-
-.field-error {
-    color: #d33;
-    margin-top: 4px;
-    display: block;
-}
-
-
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box
-}
-
 /* =========================================================
-   (NUEVO) ESTILOS ADITIVOS PARA TAREAS COMO "CHIPS"
-   Scoping: #homePage y #notesList para no afectar otros .kairo-list
+   K A I R O  —  CSS compacto
    ========================================================= */
 
-/* Icono extra usado en la acción de eliminar (ajusta la ruta si es necesario) */
-.icon--trash {
-    -webkit-mask: url('/trash.svg') no-repeat center / contain;
-    mask: url('/trash.svg') no-repeat center / contain;
+/* ---------- 1) Variables y resets ---------- */
+:root{
+  --k-text:#111; --k-muted:#666; --k-line:#ddd; --k-border:#ddd;
+  --k-btn:#333;  --k-btn-hover:#555; --k-bg:#f7f7f7;
+  --k-font:'Roboto', Arial, sans-serif;
+}
+html,body{
+  font-family:var(--k-font);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+h1,h2,h3,h4,h5,h6,button,input,select,textarea{ font-family:inherit; }
+::before,*::after{ box-sizing:border-box; }
+
+/* ---------- 2) Logo ---------- */
+.kairo-logo{ display:flex; justify-content:center; align-items:center; padding:16px 0 10px; }
+.kairo-logo-img{
+  display:block; margin:0 auto 12px;
+  width:clamp(180px,45vw,340px); height:auto; max-width:100%; border-radius:15%;
 }
 
-/* Layout SOLO del listado de la home */
-#homePage #notesList.kairo-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px 12px;
+/* ---------- 3) Sistema de iconos ---------- */
+.icon{ display:inline-block; width:18px; height:18px; background-color:currentColor; }
+.icon--logout,.icon--user,.icon--search,.icon--back,.icon--noteadd,.icon--calendar,.icon--trash{
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  -webkit-mask-position:center;  mask-position:center;
+  -webkit-mask-size:contain;     mask-size:contain;
+}
+.icon--logout  { -webkit-mask-image:url('/logout.svg');  mask-image:url('/logout.svg'); }
+.icon--user    { -webkit-mask-image:url('/user.svg');    mask-image:url('/user.svg'); }
+.icon--search  { -webkit-mask-image:url('/search.svg');  mask-image:url('/search.svg'); }
+.icon--back    { -webkit-mask-image:url('/back.svg');    mask-image:url('/back.svg'); }
+.icon--noteadd { -webkit-mask-image:url('/note-add.svg');mask-image:url('/note-add.svg'); }
+.icon--calendar{ -webkit-mask-image:url('/calendar.svg');mask-image:url('/calendar.svg'); }
+.icon--trash   { -webkit-mask-image:url('/trash.svg');   mask-image:url('/trash.svg'); }
+
+/* tamaño especial del icono dentro del FAB */
+.kairo-fab .icon{ width:40px; height:40px; }
+
+/* ---------- 4) Botón de icono genérico ---------- */
+.icon-btn{
+  display:grid; place-items:center; width:30px; height:30px; padding:0;
+  border-radius:8px; border:1px solid #bdbdbd;
+  background:#e6e6e6; color:#222; cursor:pointer;
+}
+.icon-btn:hover{ color:#000; }
+.icon-btn .icon{ width:20px; height:20px; }
+
+/* ---------- 5) Auth / formularios ---------- */
+.kairo-auth{
+  min-height:calc(100vh - 48px); display:flex; justify-content:center; align-items:flex-start;
+  padding:24px; background:transparent; color:var(--k-text);
+}
+.kairo-auth-card{
+  width:min(420px,92vw); background:#fff; border:1px solid var(--k-border); border-radius:8px;
+  padding:24px 24px 28px; box-shadow:0 4px 10px rgba(0,0,0,.1);
+}
+.kairo-label{ display:block; margin:12px 0 6px; font-size:14px; color:#555; }
+.kairo-input-line{
+  display:block; width:100%; margin-top:5px; padding:10px; font-size:14px;
+  background:#fff; border:1px solid #ccc; border-radius:4px; outline:none;
+  border-bottom:1px solid var(--k-line);
+}
+.kairo-input-line:focus{ border-bottom-color:#555; }
+input[readonly], input[disabled]{ background:#f1f1f1; cursor:not-allowed; }
+
+.kairo-btn{
+  display:block; width:100%; border:none; border-radius:4px; padding:12px 10px; margin-top:20%;
+  font-weight:700; letter-spacing:.3px; cursor:pointer;
+}
+.kairo-btn[disabled]{ opacity:.5; cursor:not-allowed; }
+.kairo-btn-primary{ background:var(--k-btn); color:#fff; }
+.kairo-btn-primary:hover{ background:var(--k-btn-hover); }
+
+.kairo-link-row{ text-align:center; margin-top:14px; font-size:13px; color:var(--k-muted); }
+.kairo-link{ color:#333; text-decoration:underline; }
+.kairo-alert{ margin-top:10px; padding:10px 12px; border:1px solid var(--k-border); border-radius:6px; font-size:13px; }
+
+/* ---------- 6) Estructura general / topbar ---------- */
+.kairo-page{ min-height:100vh; display:flex; flex-direction:column; background:var(--k-bg); }
+.kairo-topbar{
+  position:sticky; top:0; z-index:10; display:flex; align-items:center; gap:8px;
+  padding:6px 10px; background:#cfcfcf; border-bottom:1px solid #bdbdbd;
+}
+.kairo-title{
+  position:absolute; left:50%; transform:translateX(-50%);
+  margin:0; font-size:13px; font-weight:800; letter-spacing:.6px;
 }
 
-/* Fallback para ítems legacy .todo (mantiene lista vertical si aún los usas) */
-#homePage #notesList .todo {
-    width: 100%;
+/* ---------- 7) Buscador plegable en topbar ---------- */
+#searchForm{ margin-left:auto; display:flex; align-items:center; position:relative; }
+#searchForm.is-compact{ padding:0; background:transparent; }
+#searchForm.is-compact #searchInput{
+  width:0; opacity:0; padding:0; margin:0; border:0; pointer-events:none;
+  transition:width .2s ease, opacity .2s ease;
+}
+#searchBtn{
+  width:28px; height:28px; border-radius:20%; border:1px solid var(--k-border);
+  background:#efefef; color:#333; cursor:pointer;
+}
+#searchForm:not(.is-compact){ background:#cfcfcf; border-radius:2px; padding:6px 40px 6px 10px; }
+#searchForm #searchInput{
+  width:220px; max-width:25vw; opacity:1; border:none; outline:none; background:transparent;
+  font-size:14px; color:#222; transition:width .2s ease, opacity .2s ease;
+}
+#searchForm:not(.is-compact) #searchBtn{ position:absolute; right:6px; top:50%; transform:translateY(-50%); }
+
+/* ---------- 8) Menú de perfil (dropdown) ---------- */
+#profileMenu{
+  position:absolute; right:8px; top:calc(100% + 6px); min-width:220px;
+  background:#fff; color:var(--k-text); border:1px solid var(--k-border); border-radius:8px;
+  box-shadow:0 12px 24px rgba(0,0,0,.12); padding:6px; z-index:1000; animation:kMenuIn .12s ease-out;
+}
+#profileMenu[hidden]{ display:none !important; }
+#profileMenu::before{
+  content:""; position:absolute; right:16px; top:-6px; width:10px; height:10px;
+  background:#fff; border-left:1px solid var(--k-border); border-top:1px solid var(--k-border); transform:rotate(45deg);
+}
+#profileMenu a[role="menuitem"]{
+  display:flex; align-items:center; gap:.5rem; padding:10px 12px; border-radius:6px;
+  text-decoration:none; color:inherit; font-size:14px; line-height:1.1; cursor:pointer;
+}
+#profileMenu a[role="menuitem"]:hover{ background:#f1f1f1; }
+#profileMenu a[role="menuitem"]:focus-visible{ outline:2px solid #5b9dd9; outline-offset:2px; }
+#profileMenu a[role="menuitem"]:active{ background:#e7e7e7; }
+#profileMenu .k-sep{ height:1px; background:var(--k-border); margin:6px 8px; }
+@keyframes kMenuIn{ from{opacity:0; transform:translateY(-4px) scale(.98);} to{opacity:1; transform:none;} }
+
+/* ---------- 9) Listas legacy / contenido base ---------- */
+.kairo-board{ flex:1; padding:8px 12px; }
+.kairo-empty{ margin-top:28vh; text-align:center; color:#222; }
+.kairo-list{ list-style:none; margin:8px 0 0; padding:0; }
+.kairo-list .todo{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:10px 6px; border-bottom:1px solid #eee; }
+.kairo-list .todo.completed span{ color:#999; text-decoration:line-through; }
+.kairo-list .remove{ border:none; background:transparent; text-decoration:underline; font-size:12px; color:#333; cursor:pointer; }
+
+/* --- Ocultar SIEMPRE la lista vieja para evitar duplicados/overflow --- */
+#homePage #notesList{ 
+  display: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
 }
 
-/* Contenedor de cada tarea (li) */
-#homePage .kairo-note {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    max-width: 100%;
+/* --- Robustez responsive: evita desbordes de columnas/hijos --- */
+#homePage .k-board-grid{
+  grid-template-columns: repeat(3, minmax(0,1fr)); /* minmax evita overflow */
+  width: 100%;
+}
+#homePage .k-col-card{ min-width: 0; }                 /* hijos no fuerzan ancho */
+#homePage .k-col-card .kairo-list{ overflow-x: hidden; }
+
+/* Breakpoints: 2 cols y 1 col (ajustado a 768px para móvil) */
+@media (max-width: 980px){
+  #homePage .k-board-grid{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px){
+  #homePage .k-board-grid{ grid-template-columns: 1fr; }
 }
 
-/* Botón/Chip de tarea */
-#homePage .kairo-chip {
-    /* color base; estados lo sobreescriben */
-    --status: #64748b;
-
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    border-radius: 9999px;
-    border: 1px solid var(--k-border);
-    /* fallback */
-    background: #fff;
-    /* fallback */
-    box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
-    font: 600 0.9rem/1.1 var(--k-font);
-    color: var(--k-text);
-    cursor: pointer;
-    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+/* ---------- 10) Bottom bar ---------- */
+.kairo-bottombar{
+  position:fixed; left:0; right:0; bottom:10px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 12px; background:transparent;
 }
+.kairo-bottom-hint{ color:#a4a2a2; font-size:14px; }
+.kairo-fab{ width:44px; height:44px; border:none; background:transparent; color:#111; font-size:32px; line-height:44px; cursor:pointer; }
+#calendarBtn{ width:34px; height:28px; border-radius:4px; border:1px solid #d0d0d0; background:#efefef; cursor:pointer; }
 
-/* Mejora visual cuando el navegador soporta color-mix */
+/* ---------- 11) Board dentro de tarjeta ---------- */
+.kairo-main{ flex:1; }
+.kairo-auth.kairo-auth--board{ align-items:flex-start; padding:25px 25px; }
+.kairo-auth-card.kairo-card-board{ width:min(920px,94vw); padding:16px 16px 8px; }
+.kairo-card-board .kairo-board{ max-height:calc(100vh - 180px); overflow:auto; padding:8px 4px; }
+.kairo-card-footer{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 4px 4px; border-top:1px solid var(--k-border); margin-top:6px; }
+@media (max-width:640px){ .kairo-auth-card.kairo-card-board{ width:min(100%,94vw); padding:12px 12px 6px; } }
+
+/* ---------- 12) Páginas de formulario ---------- */
+.kairo-auth.kairo-auth--form{ align-items:flex-start; padding:24px 16px; }
+.kairo-auth-card.kairo-card-form{ width:min(620px,94vw); padding:20px 20px 16px; }
+.kairo-form .kairo-btn{ margin-top:30px; }
+.kairo-check{ display:flex; align-items:center; gap:8px; margin:20px 0 10px; font-size:14px; color:var(--k-text); }
+
+/* ---------- 13) Spinner ---------- */
+.kairo-spinner{
+  display:flex; align-items:center; gap:.6rem; padding:10px 12px; margin:10px 0 6px;
+  border:1px solid var(--k-border); border-radius:6px; background:#fff; font-size:14px; color:#333;
+}
+.kairo-spinner[hidden]{ display:none !important; }
+.kairo-spinner__dot{ width:16px; height:16px; border-radius:50%; border:2px solid #ccc; border-top-color:#333; animation:kSpin .8s linear infinite; }
+@keyframes kSpin{ to{ transform:rotate(360deg); } }
+.kairo-spinner__text{ opacity:.85; }
+
+/* ---------- 14) Mensajes de error ---------- */
+.field-error{ color:#d33; margin-top:4px; display:none; }
+.field-error:not([hidden]){ display:block; }
+
+/* =========================================================
+   15) Board — “chips” de tareas (scoped a #homePage)
+   ========================================================= */
+#homePage #notesList.kairo-list{ display:flex; flex-wrap:wrap; gap:8px; padding:8px 12px; }
+#homePage #notesList .todo{ width:100%; }
+#homePage .kairo-note{ display:inline-flex; align-items:center; gap:6px; max-width:100%; }
+#homePage .kairo-chip{
+  --status:#64748b;
+  display:inline-flex; align-items:center; gap:8px; padding:6px 10px;
+  border-radius:9999px; border:1px solid var(--k-border); background:#fff;
+  box-shadow:0 1px 0 rgba(0,0,0,.06);
+  font:600 .9rem/1.1 var(--k-font); color:var(--k-text);
+  cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
 @supports (color: color-mix(in oklab, white, black)) {
-    #homePage .kairo-chip {
-        border-color: color-mix(in oklab, var(--status) 30%, var(--k-border));
-        background: color-mix(in oklab, var(--status) 12%, #ffffff);
-    }
+  #homePage .kairo-chip{
+    border-color:color-mix(in oklab, var(--status) 30%, var(--k-border));
+    background:  color-mix(in oklab, var(--status) 12%, #ffffff);
+  }
+}
+#homePage .kairo-chip:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.08); }
+#homePage .kairo-chip:focus-visible{ outline:3px solid color-mix(in oklab, var(--status) 45%, transparent); outline-offset:2px; }
+#homePage .kairo-chip__text{ max-width:26ch; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* NUEVO: meta (fecha/hora + estado) */
+#homePage .kairo-chip__meta{ font-size:.75rem; opacity:.75; display:block; }
+
+/* Barra de acciones (calendario izq / crear der) */
+#homePage .k-board-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 6px 12px;}
+#homePage .k-board-actions-left,#homePage .k-board-actions-right{display:flex;gap:8px;}
+#homePage .k-board-actions-right{margin-left:auto;}
+
+/* Botón acción (papelera) */
+#homePage .kairo-chip__action{
+  inline-size:26px; block-size:26px; display:inline-grid; place-items:center;
+  border-radius:8px; border:1px solid var(--k-border); background:#fff; color:#222;
+  cursor:pointer; transition:background .15s ease, transform .15s ease;
+}
+#homePage .kairo-chip__action:hover{ transform:translateY(-1px); background:color-mix(in oklab, var(--status) 8%, #fff); }
+#homePage .kairo-chip__action .icon{ inline-size:1rem; block-size:1rem; }
+
+/* Estados (colores) */
+#homePage .kairo-note.is-todo    .kairo-chip{ --status:#2563eb; }
+#homePage .kairo-note.is-doing   .kairo-chip{ --status:#f59e0b; }
+#homePage .kairo-note.is-done    .kairo-chip{ --status:#10b981; }
+#homePage .kairo-note.is-overdue .kairo-chip{ --status:#ef4444; }
+#homePage .kairo-note.is-done .kairo-chip__text{ text-decoration:line-through; opacity:.85; }
+
+/* ---------- 16) Grid de tres columnas y cards del board ---------- */
+#homePage .k-board-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:0 4px 8px;
+}
+@media (max-width:980px){ #homePage .k-board-grid{ grid-template-columns:1fr 1fr; } }
+@media (max-width:620px){ #homePage .k-board-grid{ grid-template-columns:1fr; } }
+
+#homePage .k-col-card{
+  background:#fff; border:1px solid var(--k-border); border-radius:10px;
+  padding:8px; display:flex; flex-direction:column; min-height:160px;
+}
+#homePage .k-col-header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:8px; padding:4px 6px 8px; border-bottom:1px solid #eee;
+}
+#homePage .k-col-title{
+  margin:0; font-size:14px; font-weight:800; letter-spacing:.3px; color:#222; text-transform:uppercase;
+}
+#homePage .k-col-count{
+  min-width:22px; height:22px; padding:0 6px; display:inline-grid; place-items:center;
+  border-radius:999px; background:#efefef; border:1px solid var(--k-border);
+  font-size:12px; font-weight:700; color:#333;
+}
+#homePage .kairo-col-empty{ margin:10px 6px 6px; color:#777; font-size:13px; }
+#homePage .k-col-card .kairo-list{ display:flex; flex-wrap:wrap; gap:8px; padding:8px 6px; margin:0; list-style:none; }
+
+/* ---------- 16.1) Vista LISTA y Kanban scrollable en móviles ---------- */
+.k-list-view{ padding:8px 6px; }
+@media (max-width:768px){
+  /* Vista lista por defecto */
+  #homePage .k-list-view .kairo-note{ width:100%; }
+  /* Kanban horizontalmente scrollable */
+  #homePage .k-board-grid{
+    display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:8px;
+  }
+  #homePage .k-col-card{ min-width:86vw; scroll-snap-align:start; }
 }
 
-#homePage .kairo-chip:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+/* ---------- 17) Drawer de búsqueda (opcional) ---------- */
+.kairo-drawer{
+  position:fixed; inset:0 auto 0 0; width:300px; background:#fff;
+  border-right:1px solid var(--k-border); transform:translateX(-100%); transition:transform .25s ease;
+  z-index:1200; padding:14px 12px; box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
-
-#homePage .kairo-chip:focus-visible {
-    outline: 3px solid color-mix(in oklab, var(--status) 45%, transparent);
-    outline-offset: 2px;
+.kairo-drawer.is-open{ transform:translateX(0); }
+.kairo-drawer__header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.kairo-search-form input{ width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; outline:none; font-size:14px; }
+.kairo-drawer__hint{ margin:10px 2px 0; font-size:12px; color:#777; }
+.kairo-drawer-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.25); z-index:1100;
+  opacity:0; transition:opacity .2s ease; pointer-events:none;
 }
-
-/* Texto con elipsis */
-#homePage .kairo-chip__text {
-    max-width: 26ch;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* Botón de acción (por ejemplo, eliminar) */
-#homePage .kairo-chip__action {
-    inline-size: 26px;
-    block-size: 26px;
-    display: inline-grid;
-    place-items: center;
-    border-radius: 8px;
-    border: 1px solid var(--k-border);
-    /* fallback */
-    background: #fff;
-    /* fallback */
-    cursor: pointer;
-    transition: background .15s ease, transform .15s ease;
-}
-
-@supports (color: color-mix(in oklab, white, black)) {
-    #homePage .kairo-chip__action {
-        border-color: color-mix(in oklab, var(--status) 35%, var(--k-border));
-        background: #fff;
-    }
-}
-
-#homePage .kairo-chip__action:hover {
-    transform: translateY(-1px);
-    background: color-mix(in oklab, var(--status) 8%, #fff);
-}
-
-#homePage .kairo-chip__action .icon {
-    inline-size: 1rem;
-    block-size: 1rem;
-}
-
-/* Estados */
-#homePage .kairo-note.is-todo .kairo-chip {
-    --status: #2563eb;
-}
-
-/* azul */
-#homePage .kairo-note.is-doing .kairo-chip {
-    --status: #f59e0b;
-}
-
-/* ámbar */
-#homePage .kairo-note.is-done .kairo-chip {
-    --status: #10b981;
-}
-
-/* verde */
-#homePage .kairo-note.is-overdue .kairo-chip {
-    --status: #ef4444;
-}
-
-/* rojo */
-
-#homePage .kairo-note.is-done .kairo-chip__text {
-    text-decoration: line-through;
-    opacity: .85;
-}
-
-/* Dark mode (automático) */
-@media (prefers-color-scheme: dark) {
-    #homePage .kairo-chip {
-        color: #e5e7eb;
-        background: #0b0f17;
-        border-color: #253041;
-        box-shadow: none;
-    }
-
-    #homePage .kairo-chip__action {
-        background: #0b0f17;
-        border-color: #253041;
-    }
-
-    /* ====== Icono para botón eliminar ====== */
-    .icon--trash {
-        -webkit-mask: url('/trash.svg') no-repeat center / contain;
-        mask: url('/trash.svg') no-repeat center / contain;
-    }
-
-    /* ====== Barra de acciones fuera de las cards ====== */
-    #homePage .k-board-toolbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 8px 6px 12px;
-    }
-
-    /* ====== Grid de 3 columnas ====== */
-    #homePage .k-board-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        padding: 0 4px 8px;
-    }
-
-    @media (max-width: 980px) {
-        #homePage .k-board-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-
-    @media (max-width: 620px) {
-        #homePage .k-board-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    /* ====== Card de cada columna ====== */
-    #homePage .k-col-card {
-        background: #fff;
-        border: 1px solid var(--k-border);
-        border-radius: 10px;
-        padding: 8px;
-        display: flex;
-        flex-direction: column;
-        min-height: 160px;
-    }
-
-    #homePage .k-col-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        padding: 4px 6px 8px;
-        border-bottom: 1px solid #eee;
-    }
-
-    #homePage .k-col-title {
-        margin: 0;
-        font-size: 14px;
-        font-weight: 800;
-        letter-spacing: .3px;
-        color: #222;
-        text-transform: uppercase;
-    }
-
-    #homePage .k-col-count {
-        min-width: 22px;
-        height: 22px;
-        padding: 0 6px;
-        display: inline-grid;
-        place-items: center;
-        border-radius: 999px;
-        background: #efefef;
-        border: 1px solid var(--k-border);
-        font-size: 12px;
-        font-weight: 700;
-        color: #333;
-    }
-
-    #homePage .kairo-col-empty {
-        margin: 10px 6px 6px;
-        color: #777;
-        font-size: 13px;
-    }
-
-    /* ====== Listas dentro de cada card ====== */
-    #homePage .k-col-card .kairo-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 8px 6px;
-        margin: 0;
-        list-style: none;
-    }
-
-    /* ====== Chips de tareas ====== */
-    #homePage .kairo-note {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        max-width: 100%;
-    }
-
-    #homePage .kairo-chip {
-        --status: #64748b;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 10px;
-        border-radius: 9999px;
-        border: 1px solid var(--k-border);
-        background: #fff;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
-        font: 600 0.9rem/1.1 var(--k-font);
-        color: var(--k-text);
-        cursor: pointer;
-        transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-    }
-
-    @supports (color: color-mix(in oklab, white, black)) {
-        #homePage .kairo-chip {
-            border-color: color-mix(in oklab, var(--status) 30%, var(--k-border));
-            background: color-mix(in oklab, var(--status) 12%, #fff);
-        }
-    }
-
-    #homePage .kairo-chip:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
-    }
-
-    #homePage .kairo-chip:focus-visible {
-        outline: 3px solid color-mix(in oklab, var(--status) 45%, transparent);
-        outline-offset: 2px;
-    }
-
-    #homePage .kairo-chip__text {
-        max-width: 26ch;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    #homePage .kairo-chip__action {
-        inline-size: 26px;
-        block-size: 26px;
-        display: inline-grid;
-        place-items: center;
-        border-radius: 8px;
-        border: 1px solid var(--k-border);
-        background: #fff;
-        cursor: pointer;
-        transition: background .15s ease, transform .15s ease;
-    }
-
-    @supports (color: color-mix(in oklab, white, black)) {
-        #homePage .kairo-chip__action {
-            border-color: color-mix(in oklab, var(--status) 35%, var(--k-border));
-        }
-    }
-
-    #homePage .kairo-chip__action:hover {
-        transform: translateY(-1px);
-        background: color-mix(in oklab, var(--status) 8%, #fff);
-    }
-
-    #homePage .kairo-chip__action .icon {
-        inline-size: 1rem;
-        block-size: 1rem;
-    }
-
-    /* Estados de color */
-    #homePage .kairo-note.is-todo .kairo-chip {
-        --status: #2563eb;
-    }
-
-    /* Pendiente */
-    #homePage .kairo-note.is-doing .kairo-chip {
-        --status: #f59e0b;
-    }
-
-    /* En progreso */
-    #homePage .kairo-note.is-done .kairo-chip {
-        --status: #10b981;
-    }
-
-    /* Completada */
-
-    #homePage .kairo-note.is-done .kairo-chip__text {
-        text-decoration: line-through;
-        opacity: .85;
-    }
-
-
-    /* Oculta por completo la lista antigua para que no aparezca por fuera */
-    #homePage #notesList {
-        display: none !important;
-    }
-
-    /* Icono papelera (ajusta ruta si hace falta) */
-    .icon--trash {
-        -webkit-mask: url('/trash.svg') no-repeat center / contain;
-        mask: url('/trash.svg') no-repeat center / contain;
-    }
-
-    /* Barra de acciones fuera de las cards */
-    #homePage .k-board-toolbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 8px 6px 12px;
-    }
-
-    /* Grid de 3 columnas */
-    #homePage .k-board-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        padding: 0 4px 8px;
-    }
-
-    @media (max-width:980px) {
-        #homePage .k-board-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-
-    @media (max-width:620px) {
-        #homePage .k-board-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    /* Card de columna */
-    #homePage .k-col-card {
-        background: #fff;
-        border: 1px solid var(--k-border);
-        border-radius: 10px;
-        padding: 8px;
-        display: flex;
-        flex-direction: column;
-        min-height: 160px;
-    }
-
-    #homePage .k-col-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        padding: 4px 6px 8px;
-        border-bottom: 1px solid #eee;
-    }
-
-    #homePage .k-col-title {
-        margin: 0;
-        font-size: 14px;
-        font-weight: 800;
-        letter-spacing: .3px;
-        color: #222;
-        text-transform: uppercase;
-    }
-
-    #homePage .k-col-count {
-        min-width: 22px;
-        height: 22px;
-        padding: 0 6px;
-        display: inline-grid;
-        place-items: center;
-        border-radius: 999px;
-        background: #efefef;
-        border: 1px solid var(--k-border);
-        font-size: 12px;
-        font-weight: 700;
-        color: #333;
-    }
-
-    #homePage .kairo-col-empty {
-        margin: 10px 6px 6px;
-        color: #777;
-        font-size: 13px;
-    }
-
-    /* Listas dentro de cada card */
-    #homePage .k-col-card .kairo-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 8px 6px;
-        margin: 0;
-        list-style: none;
-    }
-
-    /* Chips */
-    #homePage .kairo-note {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        max-width: 100%;
-    }
-
-    #homePage .kairo-chip {
-        --status: #64748b;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 10px;
-        border-radius: 9999px;
-        border: 1px solid var(--k-border);
-        background: #fff;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
-        font: 600 0.9rem/1.1 var(--k-font);
-        color: var(--k-text);
-        cursor: pointer;
-        transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-    }
-
-    @supports (color: color-mix(in oklab, white, black)) {
-        #homePage .kairo-chip {
-            border-color: color-mix(in oklab, var(--status) 30%, var(--k-border));
-            background: color-mix(in oklab, var(--status) 12%, #fff);
-        }
-    }
-
-    #homePage .kairo-chip:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
-    }
-
-    #homePage .kairo-chip:focus-visible {
-        outline: 3px solid color-mix(in oklab, var(--status) 45%, transparent);
-        outline-offset: 2px;
-    }
-
-    #homePage .kairo-chip__text {
-        max-width: 26ch;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    #homePage .kairo-chip__action {
-        inline-size: 26px;
-        block-size: 26px;
-        display: inline-grid;
-        place-items: center;
-        border-radius: 8px;
-        border: 1px solid var(--k-border);
-        background: #fff;
-        cursor: pointer;
-        transition: background .15s ease, transform .15s ease;
-    }
-
-    @supports (color: color-mix(in oklab, white, black)) {
-        #homePage .kairo-chip__action {
-            border-color: color-mix(in oklab, var(--status) 35%, var(--k-border));
-        }
-    }
-
-    #homePage .kairo-chip__action:hover {
-        transform: translateY(-1px);
-        background: color-mix(in oklab, var(--status) 8%, #fff);
-    }
-
-    #homePage .kairo-chip__action .icon {
-        inline-size: 1rem;
-        block-size: 1rem;
-    }
-
-    /* Colores por estado */
-    #homePage .kairo-note.is-todo .kairo-chip {
-        --status: #2563eb;
-    }
-
-    /* Pendiente */
-    #homePage .kairo-note.is-doing .kairo-chip {
-        --status: #f59e0b;
-    }
-
-    /* En progreso */
-    #homePage .kairo-note.is-done .kairo-chip {
-        --status: #10b981;
-    }
-
-    /* Completada */
-    #homePage .kairo-note.is-done .kairo-chip__text {
-        text-decoration: line-through;
-        opacity: .85;
-    }
-
-
+.kairo-drawer-overlay.is-open{ opacity:1; pointer-events:auto; }
+.kairo-note[hidden]{ display:none !important; }
+
+/* ---------- 18) Dark mode ---------- */
+@media (prefers-color-scheme: dark){
+  #homePage .kairo-chip{ box-shadow:none; }
+  #homePage .kairo-chip__action{ box-shadow:none; color:#222; }
 }

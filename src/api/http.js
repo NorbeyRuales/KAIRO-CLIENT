@@ -1,45 +1,11 @@
-/**
- * Base URL for API requests.
- * 
- * Loaded from Vite environment variables (`VITE_API_URL`).
- */
-/**const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';*/
-
 const ORIGIN = (import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '');
 const BASE_URL = ORIGIN + '/api/v1';
 
-/**
- * Generic HTTP request helper using Fetch API.
- *
- * Automatically stringifies the request body (if provided),
- * sets default headers (`Content-Type: application/json`),
- * and parses JSON responses.
- *
- * @async
- * @param {string} path - API path (relative to BASE_URL).
- * @param {Object} [options={}] - Request options.
- * @param {string} [options.method='GET'] - HTTP method (GET, POST, PUT, DELETE).
- * @param {Object} [options.headers={}] - Additional request headers.
- * @param {Object} [options.body] - Request body (will be JSON.stringified).
- * @returns {Promise<any>} The parsed response payload (JSON if available).
- * @throws {Error} If the response is not OK (status >= 400), throws with message.
- */
-
-// Log en dev para verificar
 if (import.meta.env?.DEV) console.log('🔧 BASE_URL =', BASE_URL);
 
 async function request(path, { method = 'GET', headers = {}, body } = {}) {
   const safePath = path.startsWith('/') ? path : `/${path}`;
   const token = localStorage.getItem('token');
-
-  console.log('➡️ Enviando request', method, path, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...headers,
-    },
-  });
-  
 
   const res = await fetch(`${BASE_URL}${safePath}`, {
     method,
@@ -57,7 +23,7 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
   if (!res.ok) {
     const msg = payload?.message || payload?.error || `HTTP ${res.status}`;
     const err = new Error(msg);
-    err.status = res.status;    
+    err.status = res.status;
     err.payload = payload;
     throw err;
   }
@@ -65,38 +31,9 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
   return payload;
 }
 
-/**
- * Convenience HTTP client.
- * Provides shorthand methods for common HTTP verbs.
- */
 export const http = {
-  /**
-   * Perform a GET request.
-   * @param {string} path - API path.
-   * @param {Object} [opts] - Optional fetch options.
-   */
   get: (path, opts) => request(path, { method: 'GET', ...opts }),
-
-  /**
-   * Perform a POST request.
-   * @param {string} path - API path.
-   * @param {Object} body - Request body.
-   * @param {Object} [opts] - Optional fetch options.
-   */
   post: (path, body, opts) => request(path, { method: 'POST', body, ...opts }),
-
-  /**
-   * Perform a PUT request.
-   * @param {string} path - API path.
-   * @param {Object} body - Request body.
-   * @param {Object} [opts] - Optional fetch options.
-   */
   put: (path, body, opts) => request(path, { method: 'PUT', body, ...opts }),
-
-  /**
-   * Perform a DELETE request.
-   * @param {string} path - API path.
-   * @param {Object} [opts] - Optional fetch options.
-   */
   del: (path, opts) => request(path, { method: 'DELETE', ...opts }),
 };
