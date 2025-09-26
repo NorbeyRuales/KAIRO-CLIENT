@@ -104,18 +104,24 @@ export function initBoard() {
     }
 
     // Fallback si no existe el template
-    const li = document.createElement('li');
-    li.dataset.id = id;
-    li.className = `kairo-note is-${stKey}`;
-    li.innerHTML = `
-      <button class="kairo-chip" data-action="edit" aria-label="Editar nota">
-        <span class="kairo-chip__text">${title}</span>
-        <small class="kairo-chip__meta">${fmtDT(task)}${task.status ? ` • ${statusLabel(stKey)}` : ''}</small>
-      </button>
-      <button class="kairo-chip__action" data-action="delete" aria-label="Eliminar nota">
-        <span class="icon icon--trash" aria-hidden="true"></span>
-      </button>`;
-    return { li, stKey };
+const li = document.createElement('li');
+li.dataset.id = id;
+li.className = `kairo-note is-${stKey}`;
+li.innerHTML = `
+  <button class="kairo-chip" data-action="edit" aria-label="Editar nota">
+    <span class="kairo-chip__text">${title}</span>
+  </button>
+
+  <button class="kairo-chip__action" data-action="edit" aria-label="Editar nota" title="Editar">
+    <span class="icon icon--noteedit" aria-hidden="true"></span>
+  </button>
+
+  <button class="kairo-chip__action" data-action="delete" aria-label="Eliminar nota" title="Eliminar">
+    <span class="icon icon--trash" aria-hidden="true"></span>
+  </button>
+`;
+return { li, stKey };
+
   }
 
   // ---- Render Kanban ----
