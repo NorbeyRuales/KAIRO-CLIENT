@@ -6,7 +6,7 @@ export function initRegister() {
   if (!form) return;
 
   // Inputs
-  const name = document.getElementById('rname');
+  const username = document.getElementById('rname');   // ahora es username
   const lastname = document.getElementById('rlastname');
   const birthdate = document.getElementById('rbirthdate');
   const email = document.getElementById('remail');
@@ -26,9 +26,9 @@ export function initRegister() {
 
   // --- Validación por campo ---
   const fields = {
-    name: {
-      el: name, err: errName,
-      check: (v) => v.trim() ? [true, ""] : [false, "Debes ingresar tus nombres"],
+    username: {
+      el: username, err: errName,
+      check: (v) => v.trim() ? [true, ""] : [false, "Debes ingresar tu nombre de usuario"],
     },
     lastname: {
       el: lastname, err: errLast,
@@ -68,7 +68,7 @@ export function initRegister() {
     el.classList.toggle('is-valid', ok);
     el.setAttribute('aria-invalid', String(!ok));
     err.textContent = ok ? "" : msgText;
-    err.hidden = ok;             // ← aquí se muestra/oculta el <small>
+    err.hidden = ok;
     return ok;
   }
 
@@ -81,7 +81,7 @@ export function initRegister() {
   function validateAll() {
     let allOk = true;
     Object.keys(fields).forEach(k => {
-      touched[k] = true;              // al enviar, marcamos todos como “tocados”
+      touched[k] = true;
       if (!validateField(k)) allOk = false;
     });
     return allOk;
@@ -111,7 +111,7 @@ export function initRegister() {
 
     try {
       await registerUser({
-        name: name.value.trim(),
+        username: username.value.trim(),  // CORREGIDO
         lastname: lastname.value.trim(),
         birthdate: birthdate.value,
         email: email.value.trim(),

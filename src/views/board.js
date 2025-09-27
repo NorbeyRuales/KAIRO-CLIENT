@@ -256,10 +256,7 @@ return { li, stKey };
   // ---- Crear ----
   createBtn.addEventListener('click', () => { location.hash = '#/tasks/new'; });
 
-  // ---- Calendario ----
-  calendarBtn.addEventListener('click', () => {
-    showToast('Aquí abrirías el calendario 📅');
-  });
+
 
   // ---- Delegación de eventos en el grid/lista (editar / eliminar) ----
   function onClickList(e) {
