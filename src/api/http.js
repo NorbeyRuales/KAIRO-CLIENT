@@ -1,9 +1,9 @@
 /**
  * Base URL for API requests.
  * 
- * Loaded from Vite environment variables (`VITE_API_URL`).
+ * Loaded from Vite environment variables (VITE_API_URL).
  */
-/**const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';*/
+/* const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1'; */
 
 const ORIGIN = (import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '');
 const BASE_URL = ORIGIN + '/api/v1';
@@ -12,7 +12,7 @@ const BASE_URL = ORIGIN + '/api/v1';
  * Generic HTTP request helper using Fetch API.
  *
  * Automatically stringifies the request body (if provided),
- * sets default headers (`Content-Type: application/json`),
+ * sets default headers (Content-Type: application/json),
  * and parses JSON responses.
  *
  * @async
@@ -32,14 +32,13 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
   const safePath = path.startsWith('/') ? path : `/${path}`;
   const token = localStorage.getItem('token');
 
-  console.log('➡️ Enviando request', method, path, {
+  console.log('➡️ Enviando request', method, safePath, {
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
   });
-  
 
   const res = await fetch(`${BASE_URL}${safePath}`, {
     method,
@@ -48,7 +47,7 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
-    body: body ? JSON.stringify(body) : undefined,
+    body: body != null ? JSON.stringify(body) : undefined,
   });
 
   const isJSON = res.headers.get('content-type')?.includes('application/json');
@@ -75,7 +74,7 @@ export const http = {
    * @param {string} path - API path.
    * @param {Object} [opts] - Optional fetch options.
    */
-  get: (path, opts) => request(path, { method: 'GET', ...opts }),
+  get: (path, opts) => request(path, { method: 'GET', ...(opts || {}) }),
 
   /**
    * Perform a POST request.
@@ -83,7 +82,7 @@ export const http = {
    * @param {Object} body - Request body.
    * @param {Object} [opts] - Optional fetch options.
    */
-  post: (path, body, opts) => request(path, { method: 'POST', body, ...opts }),
+  post: (path, body, opts) => request(path, { method: 'POST', body, ...(opts || {}) }),
 
   /**
    * Perform a PUT request.
@@ -91,12 +90,12 @@ export const http = {
    * @param {Object} body - Request body.
    * @param {Object} [opts] - Optional fetch options.
    */
-  put: (path, body, opts) => request(path, { method: 'PUT', body, ...opts }),
+  put: (path, body, opts) => request(path, { method: 'PUT', body, ...(opts || {}) }),
 
   /**
    * Perform a DELETE request.
    * @param {string} path - API path.
    * @param {Object} [opts] - Optional fetch options.
    */
-  del: (path, opts) => request(path, { method: 'DELETE', ...opts }),
+  del: (path, opts) => request(path, { method: 'DELETE', ...(opts || {}) }),
 };

@@ -6,7 +6,6 @@ export function initTaskNew() {
   const msg = document.getElementById('formLiveRegion');
   if (!form) return;
 
-  // Habilitar botón solo cuando hay título
   const saveBtn = document.getElementById('taskSaveBtn');
   const titleInput = document.getElementById('taskTitle');
   titleInput.addEventListener('input', () => {
@@ -33,27 +32,30 @@ export function initTaskNew() {
 
     try {
       document.getElementById('taskSaving').hidden = false;
-      await createTask({ title, detail, date, time, status });
+      const resp = await createTask({ title, detail, date, time, status });
       document.getElementById('taskSaving').hidden = true;
+
+      // Notificar a quien escuche (board) para actualizar sin recarga
+      const task = resp?.task || resp?.data || { title, detail, date, time, status, _id: resp?.id || undefined, id: resp?.id || undefined };
+      window.dispatchEvent(new CustomEvent('tasks:changed', { detail: { type: 'upsert', task } }));
 
       showToast('Tarea creada correctamente');
       setTimeout(() => (location.hash = '#/board'), 300);
     } catch (err) {
       document.getElementById('taskSaving').hidden = true;
-    
+
       if (err.status === 401) {
         showToast('Debes iniciar sesión para crear tareas');
         return;
       }
-    
+
       if (msg) {
-        msg.textContent = 'Error al crear tarea: ' + err.message;
+        msg.textContent = 'Error al crear tarea: ' + (err.message || 'desconocido');
         msg.hidden = false;
       } else {
         showToast('Error al crear tarea');
       }
       console.error(err);
     }
-    
   });
 }

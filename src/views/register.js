@@ -6,7 +6,7 @@ export function initRegister() {
   if (!form) return;
 
   // Inputs
-  const name = document.getElementById('rname');
+  const username = document.getElementById('rname');   // ahora es username
   const lastname = document.getElementById('rlastname');
   const birthdate = document.getElementById('rbirthdate');
   const email = document.getElementById('remail');
@@ -24,65 +24,94 @@ export function initRegister() {
   const spinner = document.getElementById('regSpinner');
   const msg = document.getElementById('regMsg');
 
-  // Función de validación
-  const validate = () => {
-    let valid = true;
-
-    if (!name.value.trim()) {
-      errName.textContent = 'Debes ingresar tus nombres';
-      errName.hidden = false;
-      valid = false;
-    } else errName.hidden = true;
-
-    if (!lastname.value.trim()) {
-      errLast.textContent = 'Debes ingresar tus apellidos';
-      errLast.hidden = false;
-      valid = false;
-    } else errLast.hidden = true;
-
-    if (!birthdate.value) {
-      errBirth.textContent = 'Selecciona tu fecha de nacimiento';
-      errBirth.hidden = false;
-      valid = false;
-    } else errBirth.hidden = true;
-
-    if (!email.value.trim()) {
-      errEmail.textContent = 'Debes ingresar un correo';
-      errEmail.hidden = false;
-      valid = false;
-    } else errEmail.hidden = true;
-
-    if (pass1.value.length < 6) {
-      errPass.textContent = 'La contraseña debe tener al menos 6 caracteres';
-      errPass.hidden = false;
-      valid = false;
-    } else errPass.hidden = true;
-
-    if (pass1.value !== pass2.value) {
-      errPass2.textContent = 'Las contraseñas no coinciden';
-      errPass2.hidden = false;
-      valid = false;
-    } else errPass2.hidden = true;
-
-    return valid;
+  // --- Validación por campo ---
+  const fields = {
+    username: {
+      el: username, err: errName,
+      check: (v) => v.trim() ? [true, ""] : [false, "Debes ingresar tu nombre de usuario"],
+    },
+    lastname: {
+      el: lastname, err: errLast,
+      check: (v) => v.trim() ? [true, ""] : [false, "Debes ingresar tus apellidos"],
+    },
+    birthdate: {
+      el: birthdate, err: errBirth,
+      check: (v) => v ? [true, ""] : [false, "Selecciona tu fecha de nacimiento"],
+    },
+    email: {
+      el: email, err: errEmail,
+      check: (v) => {
+        const t = v.trim();
+        if (!t) return [false, "Debes ingresar un correo"];
+        return /\S+@\S+\.\S+/.test(t) ? [true, ""] : [false, "Ingresa un correo válido"];
+      },
+    },
+    pass1: {
+      el: pass1, err: errPass,
+      check: (v) => v.length >= 6 ? [true, ""] : [false, "La contraseña debe tener al menos 6 caracteres"],
+    },
+    pass2: {
+      el: pass2, err: errPass2,
+      check: (v) => {
+        if (!v) return [false, "Repite tu contraseña"];
+        if (v.length < 6) return [false, "La contraseña debe tener al menos 6 caracteres"];
+        return v === pass1.value ? [true, ""] : [false, "Las contraseñas no coinciden"];
+      },
+    },
   };
 
-  // Validación en tiempo real
-  [name, lastname, birthdate, email, pass1, pass2].forEach(el =>
-    el.addEventListener('input', validate)
-  );
+  const touched = Object.fromEntries(Object.keys(fields).map(k => [k, false]));
+
+  function paint(fieldKey, ok, msgText) {
+    const { el, err } = fields[fieldKey];
+    el.classList.toggle('is-invalid', !ok);
+    el.classList.toggle('is-valid', ok);
+    el.setAttribute('aria-invalid', String(!ok));
+    err.textContent = ok ? "" : msgText;
+    err.hidden = ok;
+    return ok;
+  }
+
+  function validateField(fieldKey) {
+    const { el, check } = fields[fieldKey];
+    const [ok, msgText] = check(el.value);
+    return paint(fieldKey, ok, msgText);
+  }
+
+  function validateAll() {
+    let allOk = true;
+    Object.keys(fields).forEach(k => {
+      touched[k] = true;
+      if (!validateField(k)) allOk = false;
+    });
+    return allOk;
+  }
+
+  // Solo validar el campo que el usuario tocó
+  Object.keys(fields).forEach(k => {
+    const { el } = fields[k];
+
+    el.addEventListener('blur', () => {
+      touched[k] = true;
+      validateField(k);
+    });
+
+    el.addEventListener('input', () => {
+      if (touched[k]) validateField(k);
+    });
+  });
 
   // Submit
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validateAll()) return;
 
     msg.hidden = true;
     spinner.hidden = false;
 
     try {
       await registerUser({
-        name: name.value.trim(),
+        username: username.value.trim(),  // CORREGIDO
         lastname: lastname.value.trim(),
         birthdate: birthdate.value,
         email: email.value.trim(),

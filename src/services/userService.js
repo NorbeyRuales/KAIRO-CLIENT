@@ -6,7 +6,7 @@ import { http } from "../api/http.js";
  */
 export async function registerUser(userData) {
   try {
-      return await http.post("/users", userData);
+    return await http.post("/users", userData);
   } catch (e) {
     throw e;
   }
@@ -31,4 +31,11 @@ export async function loginUser(credentials) {
  */
 export async function getProfile() {
   return await http.get("/users/profile");
+}
+
+/**
+ * Update current logged-in user profile
+ */
+export async function updateProfile(data) {
+  return await http.put("/users/profile", data);
 }

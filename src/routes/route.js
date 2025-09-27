@@ -27,7 +27,6 @@ async function loadView(name) {
     forgot: initForgot,
     update: initUpdate,
     'task-new': initTaskNew,
-    
   };
   inits[name]?.();
 }
@@ -38,15 +37,8 @@ function handleRoute() {
   if (hash.startsWith("task/edit/")) {
     const parts = hash.split("/");
     const taskId = parts[2];
-
-    if (taskId) {
-      console.log("TaskID en route:", taskId);
-      return loadView('task-edit').then(() => initTaskEdit(taskId));
-    } else {
-      console.warn("⚠ No se proporcionó un taskId en la ruta");
-      // Redirigir al board o mostrar error amigable
-      return loadView('board');
-    }
+    if (taskId) return loadView('task-edit').then(() => initTaskEdit(taskId));
+    return loadView('board');
   }
 
   const viewMap = {

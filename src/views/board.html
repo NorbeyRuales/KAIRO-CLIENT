@@ -9,13 +9,13 @@
     <!-- Lupa a la derecha (input plegable) -->
     <form id="searchForm" role="search" aria-label="Buscar notas" class="is-compact">
       <input id="searchInput" name="q" type="search" placeholder="BUSCAR" autocomplete="off" />
-      <button id="searchBtn" type="button" aria-label="Buscar">
+      <button id="searchBtn" type="button" aria-label="Buscar" aria-expanded="false">
         <span class="icon icon--search" aria-hidden="true"></span>
       </button>
     </form>
 
-    <button id="profileBtn" class="icon-btn" aria-haspopup="menu" aria-expanded="false"
-            aria-controls="profileMenu" aria-label="Opciones de cuenta" title="Cuenta">
+    <button id="profileBtn" class="icon-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="profileMenu"
+      aria-label="Opciones de cuenta" title="Cuenta">
       <span class="icon icon--user" aria-hidden="true"></span>
     </button>
     <nav id="profileMenu" role="menu" hidden>
@@ -30,9 +30,6 @@
         <!-- ===== Barra de acciones (FUERA de las cards de columnas) ===== -->
         <div class="k-board-toolbar" aria-label="Acciones">
           <div class="k-board-actions-left">
-            <button id="calendarBtn" class="icon-btn" aria-label="Abrir calendario">
-              <span class="icon icon--calendar" aria-hidden="true"></span>
-            </button>
           </div>
           <div class="k-board-actions-right">
             <button id="createBtn" class="kairo-fab" aria-label="Crear nota">
@@ -41,7 +38,7 @@
           </div>
         </div>
 
-        <!-- ===== Tablero con TRES columnas ===== -->
+        <!-- ===== Tablero con TRES columnas (Kanban) ===== -->
         <div class="k-board-grid" role="region" aria-label="Tus notas">
           <!-- Columna: Pendientes -->
           <section class="k-col-card" aria-labelledby="colTodoTitle">
@@ -74,11 +71,18 @@
           </section>
         </div>
 
+        <!-- ===== Vista LISTA (para móviles; se muestra por defecto ≤768px) ===== -->
+        <ul id="listView" class="kairo-list k-list-view" hidden></ul>
+
         <!-- Template para cada nota como “chip” -->
         <template id="noteItemTemplate">
           <li class="kairo-note is-todo" data-id="">
             <button class="kairo-chip" data-action="edit" aria-label="Editar nota">
               <span class="kairo-chip__text"></span>
+              <small class="kairo-chip__meta" aria-label="Fecha y hora"></small>
+            </button>
+            <button class="kairo-chip__action" data-action="edit" aria-label="Editar nota" title="Editar">
+              <span class="icon icon--note-edit" aria-hidden="true"></span>
             </button>
             <button class="kairo-chip__action" data-action="delete" aria-label="Eliminar nota">
               <span class="icon icon--trash" aria-hidden="true"></span>
