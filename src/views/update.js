@@ -67,6 +67,8 @@ export function initUpdate() {
 async function loadCurrentData() {
   try {
     const user = await getProfile();
+    console.log("👉 Perfil recibido del backend:", user); // 👈 agrega esto
+
     if (!user) return;
 
     const setVal = (id, val) => {
